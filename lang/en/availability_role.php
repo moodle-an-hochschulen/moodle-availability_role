@@ -15,18 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings.
+ * Availability role - Language pack
  *
- * @package availability_role
- * @copyright Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
- * on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['description'] = 'Allow only users with a specified role.';
-$string['error_selectrole'] = 'You must select a role.';
-$string['missing'] = '(Missing role)';
+defined('MOODLE_INTERNAL') || die();
+
+$string['description'] = 'Allow only users with a specified course role.';
+$string['error_selectrole'] = 'You must select a role';
+$string['missing'] = '[Missing role]';
 $string['title'] = 'Role';
 $string['pluginname'] = 'Restriction by course role';
-$string['requires_role'] = 'You are a(n) <strong>{$a}</strong>.';
-$string['requires_notrole'] = 'You are not a(n) <strong>{$a}</strong>.';
+$string['requires_role'] = 'You are a(n) <em>{$a}</em>';
+$string['requires_notrole'] = 'You are not a(n) <em>{$a}</em>';

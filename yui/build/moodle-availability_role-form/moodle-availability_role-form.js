@@ -25,7 +25,7 @@ M.availability_role.form.roles = null;
  * Initialises this plugin.
  *
  * @method initInner
- * @param {Array} groupings Array of objects containing groupingid => name
+ * @param {Array} roles Array of objects containing roleid => name
  */
 M.availability_role.form.initInner = function(roles) {
     this.roles = roles;

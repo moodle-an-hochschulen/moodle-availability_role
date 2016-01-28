@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version info.
+ * Availability role - Version file
  *
- * @package availability_role
- * @copyright Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
- * on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
- *
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2015092200;
-$plugin->requires = 2015051100;
 $plugin->component = 'availability_role';
+$plugin->version = 2015111600;
+$plugin->release = '3.0 (Build: 2016010100)';
+$plugin->requires = 2015111600;
+$plugin->maturity = MATURITY_STABLE;

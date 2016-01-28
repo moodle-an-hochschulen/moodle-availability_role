@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tests for role restrictions.
+ * Availability role - Tests for role restrictions
  *
- * @package availability_role
- * @copyright Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
- * on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -28,11 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 use availability_role\condition;
 
 /**
- * Unit tests for the condition.
+ * Availability role - Unit tests for the condition
  *
- * @package availability_grouping
- * @copyright 2014 The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class availability_role_condition_testcase extends advanced_testcase {
     /**
@@ -65,7 +64,6 @@ class availability_role_condition_testcase extends advanced_testcase {
         $studentinfo = new \core_availability\mock_info($course, $student->id);
         $teacherinfo = new \core_availability\mock_info($course, $teacher->id);
 
-
         // Do test (not in grouping).
         $structure = (object)array('type' => 'role', 'id' => (int) $roles['editingteacher']->id);
         $cond = new condition($structure);
@@ -74,8 +72,8 @@ class availability_role_condition_testcase extends advanced_testcase {
         $this->assertFalse($cond->is_available(false, $studentinfo, true, $student->id));
         $this->assertTrue($cond->is_available(false, $teacherinfo, true, $teacher->id));
         $information = $cond->get_description(false, false, $studentinfo);
-
     }
+
     /**
      * Tests the save() function.
      */
@@ -85,5 +83,4 @@ class availability_role_condition_testcase extends advanced_testcase {
         $structure->type = 'role';
         $this->assertEquals($structure, $cond->save());
     }
-
 }

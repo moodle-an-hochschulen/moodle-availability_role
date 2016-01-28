@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Condition main class.
+ * Availability role - Condition
  *
- * @package availability_role
- * @copyright Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
- * on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace availability_role;
@@ -28,11 +27,11 @@ namespace availability_role;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Condition main class.
+ * Availability role - Condition class
  *
- * @package availability_role
- * @copyright Bence Laky <b.laky@intrallect.com>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition extends \core_availability\condition {
     /** @var int ID of role that this condition requires */
@@ -47,7 +46,7 @@ class condition extends \core_availability\condition {
     public function __construct($structure) {
         // Get role id.
         if (isset($structure->id) && is_int($structure->id)) {
-                $this->roleid = $structure->id;
+            $this->roleid = $structure->id;
         } else {
             throw new \coding_exception('Invalid ->id for role condition');
         }
@@ -63,9 +62,8 @@ class condition extends \core_availability\condition {
         return $result;
     }
 
-    public function include_after_restore($restoreid, $courseid, \base_logger $logger,
-            $name, \base_task $task) {
-                return !$this->roleid || $task->get_setting_value('roles');
+    public function include_after_restore($restoreid, $courseid, \base_logger $logger, $name, \base_task $task) {
+        return !$this->roleid || $task->get_setting_value('roles');
     }
 
     public function update_after_restore($restoreid, $courseid, \base_logger $logger, $name) {
@@ -79,14 +77,12 @@ class condition extends \core_availability\condition {
             // If we are on the same course (e.g. duplicate) then we can just
             // use the existing one.
             if ($DB->record_exists('roles',
-                    array('id' => $this->roleid, 'courseid' => $courseid))) {
-                        return false;
-                    }
-                    // Otherwise it's a warning.
-                    $this->roleid = -1;
-                    $logger->process('Restored item (' . $name .
-                            ') has availability condition on grouping that was not restored',
-                            \backup::LOG_WARNING);
+                array('id' => $this->roleid, 'courseid' => $courseid))) {
+                    return false;
+                }
+                // Otherwise it's a warning.
+                $this->roleid = -1;
+                $logger->process('Restored item ('.$name.') has availability condition on grouping that was not restored', \backup::LOG_WARNING);
         } else {
             $this->roleid = (int)$rec->newitemid;
         }
@@ -116,16 +112,15 @@ class condition extends \core_availability\condition {
         $context = \context_course::instance($info->get_course()->id);
         $role = $DB->get_record('role', array('id' => $this->roleid));
         if (!$role) {
-            return get_string('missing', 'availability_role');
+            $missing = get_string('missing', 'availability_role');
+            return get_string($not ? 'requires_notrole' : 'requires_role', 'availability_role', $missing);
         } else {
             $name = role_get_name($role, $context);
-            return get_string($not ? 'requires_notrole' : 'requires_role', 'availability_role',
-                    $name);
+            return get_string($not ? 'requires_notrole' : 'requires_role', 'availability_role', $name);
         }
     }
 
     public function get_debug_string() {
         return "Role id: $this->roleid";
     }
-
 }

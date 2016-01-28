@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Front-end class.
+ * Availability role - Frontend form
  *
- * @package availability_role
- * @copyright Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
- * on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace availability_role;
@@ -28,16 +27,15 @@ namespace availability_role;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Front-end class.
+ * Availability role - Frontend form class
  *
- * @package availability_role
- * @copyright Bence Laky <b.laky@intrallect.com>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    availability_role
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, University of Ulm <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class frontend extends \core_availability\frontend {
 
-    protected function get_javascript_init_params($course, \cm_info $cm = null,
-            \section_info $section = null) {
+    protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
         // Get all roles for course.
         // Change to JS array format and return.
         $jsarray = array();

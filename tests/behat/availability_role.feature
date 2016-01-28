@@ -53,7 +53,7 @@ Feature: availability_role
       | Page content | x2  |
     And I click on "Save and return to course" "button"
     Then I should see "P2" in the "region-main" "region"
-    
+
     # Log back in as student.
     When I log out
     And I log in as "student1"
@@ -62,7 +62,7 @@ Feature: availability_role
     # No pages should appear yet.
     Then I should not see "P1" in the "region-main" "region"
     And I should not see "P2" in the "region-main" "region"
-    
+
     # Log back in as teacher.
     When I log out
     And I log in as "teacher1"
@@ -75,8 +75,8 @@ Feature: availability_role
     Then I expand all fieldsets
     And I click on ".availability-item .availability-delete" "css_element"
     And I click on "Save and return to course" "button"
-    
-        # Log back in as student.
+
+    # Log back in as student.
     When I log out
     And I log in as "student1"
     And I follow "Course 1"
