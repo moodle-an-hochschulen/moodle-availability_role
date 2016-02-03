@@ -76,13 +76,12 @@ class condition extends \core_availability\condition {
         if (!$rec || !$rec->newitemid) {
             // If we are on the same course (e.g. duplicate) then we can just
             // use the existing one.
-            if ($DB->record_exists('roles',
-                array('id' => $this->roleid, 'courseid' => $courseid))) {
-                    return false;
-                }
-                // Otherwise it's a warning.
-                $this->roleid = -1;
-                $logger->process('Restored item ('.$name.') has availability condition on grouping that was not restored', \backup::LOG_WARNING);
+            if ($DB->record_exists('roles', array('id' => $this->roleid, 'courseid' => $courseid))) {
+                return false;
+            }
+            // Otherwise it's a warning.
+            $this->roleid = -1;
+            $logger->process('Restored item ('.$name.') has availability condition on grouping that was not restored', \backup::LOG_WARNING);
         } else {
             $this->roleid = (int)$rec->newitemid;
         }
@@ -94,7 +93,7 @@ class condition extends \core_availability\condition {
         $context = \context_course::instance($info->get_course()->id);
         $allow = false;
 
-        foreach(get_user_roles($context, $userid) as $role) {
+        foreach (get_user_roles($context, $userid) as $role) {
             if ($role->roleid == $this->roleid) {
                 $allow = true;
                 break;
