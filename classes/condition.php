@@ -62,10 +62,6 @@ class condition extends \core_availability\condition {
         return $result;
     }
 
-    public function include_after_restore($restoreid, $courseid, \base_logger $logger, $name, \base_task $task) {
-        return !$this->roleid || $task->get_setting_value('roles');
-    }
-
     public function update_after_restore($restoreid, $courseid, \base_logger $logger, $name) {
         global $DB;
         if (!$this->roleid) {
