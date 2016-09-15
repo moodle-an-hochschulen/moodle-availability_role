@@ -86,13 +86,25 @@ class condition extends \core_availability\condition {
     }
 
     public function is_available($not, \core_availability\info $info, $grabthelot, $userid) {
+        global $USER;
         $context = \context_course::instance($info->get_course()->id);
         $allow = false;
 
-        foreach (get_user_roles($context, $userid) as $role) {
-            if ($role->roleid == $this->roleid) {
+        // Is the user's course role switched?
+        if (!empty($USER->access['rsw'][$context->path])) {
+            // Check only switched role.
+            if ($USER->access['rsw'][$context->path] == $this->roleid) {
                 $allow = true;
-                break;
+            }
+        }
+        // Or is the user currently having his own role(s)?
+        else {
+            // Check all of the user's course roles.
+            foreach (get_user_roles($context, $userid) as $role) {
+                if ($role->roleid == $this->roleid) {
+                    $allow = true;
+                    break;
+                }
             }
         }
 
