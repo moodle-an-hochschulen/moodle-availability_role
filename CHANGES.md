@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2017-01-13 - Small change to YUI Code to make the plugin work with theme_boost
 * 2017-01-12 - Move Changelog from README.md to CHANGES.md
 
 ### v3.1-r3
