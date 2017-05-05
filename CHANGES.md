@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2017-05-05 - Improve README.md
+
 ### v3.2-r2
 
 * 2017-03-23 - Bugfix: Courses with a role availability condition added to an activity were not imported cleanly - Credits to Andrew Hancox
