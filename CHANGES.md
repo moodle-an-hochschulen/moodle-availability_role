@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.2-r3
 
 * 2017-05-05 - Improve README.md
 
