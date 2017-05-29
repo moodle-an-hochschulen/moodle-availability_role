@@ -18,7 +18,8 @@
  * Availability role - Condition
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+               on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +31,8 @@ defined('MOODLE_INTERNAL') || die();
  * Availability role - Condition class
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+               on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition extends \core_availability\condition {
@@ -77,7 +79,8 @@ class condition extends \core_availability\condition {
             }
             // Otherwise it's a warning.
             $this->roleid = -1;
-            $logger->process('Restored item ('.$name.') has availability condition on a role that was not restored', \backup::LOG_WARNING);
+            $logger->process('Restored item ('.$name.') has availability condition on a role that was not restored',
+                    \backup::LOG_WARNING);
         } else {
             $this->roleid = (int)$rec->newitemid;
         }
@@ -96,9 +99,8 @@ class condition extends \core_availability\condition {
             if ($USER->access['rsw'][$context->path] == $this->roleid) {
                 $allow = true;
             }
-        }
-        // Or is the user currently having his own role(s)?
-        else {
+            // Or is the user currently having his own role(s)?
+        } else {
             // Check all of the user's course roles.
             foreach (get_user_roles($context, $userid) as $role) {
                 if ($role->roleid == $this->roleid) {
