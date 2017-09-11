@@ -19,7 +19,7 @@
  *
  * @package    availability_role
  * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
-               on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,9 +32,10 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @package    availability_role
  * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
-               on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 class condition extends \core_availability\condition {
     /** @var int ID of role that this condition requires */
     protected $roleid = 0;
@@ -80,7 +81,7 @@ class condition extends \core_availability\condition {
             // Otherwise it's a warning.
             $this->roleid = -1;
             $logger->process('Restored item ('.$name.') has availability condition on a role that was not restored',
-                    \backup::LOG_WARNING);
+                \backup::LOG_WARNING);
         } else {
             $this->roleid = (int)$rec->newitemid;
         }
@@ -89,7 +90,7 @@ class condition extends \core_availability\condition {
     }
 
     public function is_available($not, \core_availability\info $info, $grabthelot, $userid) {
-        global $USER;
+        global $USER, $CFG;
         $context = \context_course::instance($info->get_course()->id);
         $allow = false;
 
@@ -106,6 +107,23 @@ class condition extends \core_availability\condition {
                 if ($role->roleid == $this->roleid) {
                     $allow = true;
                     break;
+                }
+            }
+
+            // As get_user_roles only returns roles for enrolled users, we have to check whether a user
+            // is viewing the course as guest or is not logged in seperately.
+
+            // Is the user not logged in?
+            if (empty($userid) || isguestuser($userid)) {
+                if ($CFG->notloggedinroleid == $this->roleid) {
+                    $allow = true;
+                }
+            }
+
+            // Is the user viewing the course as guest?
+            if (is_guest($context, $userid)) {
+                if (get_guest_role()->id == $this->roleid) {
+                    $allow = true;
                 }
             }
         }
