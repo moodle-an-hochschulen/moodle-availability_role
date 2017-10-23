@@ -31,3 +31,10 @@ $string['title'] = 'Role';
 $string['pluginname'] = 'Restriction by course role';
 $string['requires_role'] = 'You are a(n) <em>{$a}</em>';
 $string['requires_notrole'] = 'You are not a(n) <em>{$a}</em>';
+$string['setting_supportedrolesheading'] = 'Supported roles';
+$string['setting_supportguestrole'] = 'Guest role';
+$string['setting_supportguestrole_desc'] = 'If activated, the availability of activities can be restricted to or forbidden for '
+    .'users that are viewing a course as guest.';
+$string['setting_supportnotloggedinrole'] = 'Not-logged-in role';
+$string['setting_supportnotloggedinrole_desc'] = 'If activated, the availability of activities can be restricted to or forbidden '
+    .'for users that are not logged in.';

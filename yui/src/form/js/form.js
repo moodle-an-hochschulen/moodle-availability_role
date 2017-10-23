@@ -35,8 +35,8 @@ M.availability_role.form.getNode = function(json) {
     var html = '<label>' + strings.title + ' <span class="availability-group">' +
             '<select name="id">' +
             '<option value="choose">' + M.str.moodle.choosedots + '</option>';
-    Y.each(this.roles, function(rolename, id) {
-        html += '<option value="' + id + '">' + rolename + '</option>';
+    Y.each(this.roles, function(role) {
+        html += '<option value="' + role.id + '">' + role.name + '</option>';
     });
     html += '</select></span></label>';
     var node = Y.Node.create('<span>' + html + '</span>');
