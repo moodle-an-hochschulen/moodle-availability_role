@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.3-r1
 
 * 2017-12-04 - Fixed compatibility changes for Behat tests.
 * 2017-12-04 - Check compatibility for Moodle 3.3, no functionality change.
