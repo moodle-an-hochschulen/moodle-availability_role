@@ -24,7 +24,7 @@ Feature: availability_role
     # Basic setup.
     Given I log in as "teacher1"
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
 
     # Start to add a Page that can be accessed by teachers only.
@@ -57,7 +57,7 @@ Feature: availability_role
     # Log back in as student.
     When I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
 
     # No pages should appear yet.
     Then I should not see "P1" in the "region-main" "region"
@@ -66,9 +66,9 @@ Feature: availability_role
     # Log back in as teacher.
     When I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I open "P1" actions menu
     And I click on "Edit settings" "link" in the "P1" activity
@@ -79,6 +79,6 @@ Feature: availability_role
     # Log back in as student.
     When I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     Then I should see "P1" in the "region-main" "region"
     And I should not see "P2" in the "region-main" "region"
