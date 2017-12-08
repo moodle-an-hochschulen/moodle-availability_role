@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.3-r2
 
 * 2017-12-08 - Changed text style for role to fit to other availability conditions.
 
