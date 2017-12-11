@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.4-r1
 
 * 2017-12-11 - Check compatibility for Moodle 3.4, no functionality change.
 
