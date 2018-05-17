@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.4-r2
 
 * 2018-05-16 - Implement Privacy API.
 
