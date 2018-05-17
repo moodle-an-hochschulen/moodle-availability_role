@@ -29,5 +29,6 @@ $string['error_selectrole'] = 'You must select a role';
 $string['missing'] = '[Missing role]';
 $string['title'] = 'Role';
 $string['pluginname'] = 'Restriction by course role';
+$string['privacy:metadata'] = 'The Restriction by course role plugin does not store any personal data.';
 $string['requires_role'] = 'You are a(n) <strong>{$a}</strong>';
 $string['requires_notrole'] = 'You are not a(n) <strong>{$a}</strong>';

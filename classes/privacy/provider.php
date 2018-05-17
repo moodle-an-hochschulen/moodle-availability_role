@@ -15,18 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Availability role - Version file
+ * Availability role - Privacy provider
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
-               on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2018 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace availability_role\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'availability_role';
-$plugin->version = 2018051600;
-$plugin->release = 'v3.4-r1';
-$plugin->requires = 2017111300;
-$plugin->maturity = MATURITY_STABLE;
+/**
+ * Privacy Subsystem implementing null_provider.
+ *
+ * @package    availability_role
+ * @copyright  2018 Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}
