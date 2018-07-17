@@ -2,7 +2,7 @@
 Feature: availability_role
   In order to control student access to activities
   As a teacher
-  I need to set grouping conditions which prevent student access
+  I need to set role conditions which prevent student access
 
   Background:
     Given the following "courses" exist:
