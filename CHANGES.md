@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2018-07-18 - Add explicit support for guest and non-logged-in users - Credits to David Knuplesch.
+
 ### v3.5-r1
 
 * 2018-05-25 - Check compatibility for Moodle 3.5, no functionality change.

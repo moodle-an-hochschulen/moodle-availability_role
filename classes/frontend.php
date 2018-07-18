@@ -36,26 +36,53 @@ defined('MOODLE_INTERNAL') || die();
 class frontend extends \core_availability\frontend {
 
     protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
-        // Get all roles for course.
         // Change to JS array format and return.
         $jsarray = array();
         $context = \context_course::instance($course->id);
 
+        // Get all roles for course.
         $roles = $this->get_course_roles($context);
 
-        return array($roles);
+        foreach ($roles as $rec) {
+            $jsarray[] = (object)array(
+                'id' => $rec->id,
+                'name' => $rec->localname
+            );
+        }
+
+        return array($jsarray);
     }
 
     protected function get_course_roles($context) {
-        global $DB;
-        $roleswithnames = array();
+        global $DB, $CFG;
+
         $contextroleids = get_roles_for_contextlevels(CONTEXT_COURSE);
-        $contextroles = $DB->get_records_list('role', 'id', $contextroleids);
-        foreach ($contextroles as $id => $role) {
-            $roleswithnames[$id] = role_get_name($role, $context);
+
+        // Add guest role, if desired and guest role exists and is not yet included.
+        $guestroleid = get_guest_role()->id;
+        if (get_config('availability_role', 'setting_supportguestrole') &&
+                !empty($guestroleid) &&
+                !in_array($guestroleid, $contextroleids)) {
+
+            $contextroleids[] = $guestroleid;
         }
 
-        return $roleswithnames;
+        // Add role for users that are not logged in, if desired and this role exists and is not yet included.
+        $notloggedinroleid = $CFG->notloggedinroleid;
+        if (get_config('availability_role', 'setting_supportnotloggedinrole') &&
+                !empty($notloggedinroleid) &&
+                !in_array($notloggedinroleid, $contextroleids)) {
+
+            $contextroleids[] = $notloggedinroleid;
+        }
+
+        $contextroles = $DB->get_records_list('role', 'id', $contextroleids, 'sortorder');
+
+        foreach ($contextroles as $id => $role) {
+            $role->localname = role_get_name($role, $context);
+        }
+
+        return $contextroles;
     }
 
     protected function allow_add($course, \cm_info $cm = null, \section_info $section = null) {

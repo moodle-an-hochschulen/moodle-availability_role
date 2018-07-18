@@ -87,7 +87,7 @@ class condition extends \core_availability\condition {
     }
 
     public function is_available($not, \core_availability\info $info, $grabthelot, $userid) {
-        global $USER;
+        global $USER, $CFG;
         $context = \context_course::instance($info->get_course()->id);
         $allow = false;
 
@@ -104,6 +104,23 @@ class condition extends \core_availability\condition {
                 if ($role->roleid == $this->roleid) {
                     $allow = true;
                     break;
+                }
+            }
+
+            // As get_user_roles only returns roles for enrolled users, we have to check whether a user
+            // is viewing the course as guest or is not logged in separately.
+
+            // Is the user not logged in?
+            if (empty($userid) || isguestuser($userid)) {
+                if ($CFG->notloggedinroleid == $this->roleid) {
+                    $allow = true;
+                }
+            }
+
+            // Is the user viewing the course as guest?
+            if (is_guest($context, $userid)) {
+                if (get_guest_role()->id == $this->roleid) {
+                    $allow = true;
                 }
             }
         }
