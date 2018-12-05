@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2018-12-05 - Changed travis.yml due to upstream changes.
+
 ### v3.5-r2
 
 * 2018-07-18 - Add explicit support for guest and non-logged-in users - Credits to David Knuplesch.
