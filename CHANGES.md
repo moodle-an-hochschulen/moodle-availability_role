@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2018-01-11 - Replaced deprecated Behat test step.
 * 2018-01-11 - Check compatibility for Moodle 3.6, no functionality change.
 * 2018-12-05 - Changed travis.yml due to upstream changes.
 

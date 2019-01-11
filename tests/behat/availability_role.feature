@@ -97,7 +97,7 @@ Feature: availability_role
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
 
-    Given I navigate to "Enrolment methods" node in "Course administration > Users"
+    Given I navigate to "Users > Enrolment methods" in current page administration
     And I click on "Edit" "link" in the "Guest access" "table_row"
     And I set the following fields to these values:
       | Allow guest access | Yes |
