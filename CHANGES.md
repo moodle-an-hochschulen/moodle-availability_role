@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.6-r1
 
 * 2018-01-11 - Replaced deprecated Behat test step.
 * 2018-01-11 - Check compatibility for Moodle 3.6, no functionality change.
