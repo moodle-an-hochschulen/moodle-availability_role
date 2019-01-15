@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.6-r2
 
 * 2019-01-15 - Re-added string privacy:metadata that was deleted by mistake.
 
