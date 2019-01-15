@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2019-01-15 - Re-added string privacy:metadata that was deleted by mistake.
+
 ### v3.6-r1
 
 * 2018-01-11 - Replaced deprecated Behat test step.
