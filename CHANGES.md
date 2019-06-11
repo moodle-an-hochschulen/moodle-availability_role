@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2019-06-11 - Prepare compatibility for Moodle 3.7.
+
 ### v3.6-r2
 
 * 2019-01-15 - Re-added string privacy:metadata that was deleted by mistake.
