@@ -18,7 +18,8 @@
  * Availability role - Language pack
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

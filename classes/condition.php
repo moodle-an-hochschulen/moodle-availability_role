@@ -18,7 +18,8 @@
  * Availability role - Condition
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +31,8 @@ defined('MOODLE_INTERNAL') || die();
  * Availability role - Condition class
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition extends \core_availability\condition {
@@ -52,6 +54,11 @@ class condition extends \core_availability\condition {
         }
     }
 
+    /**
+     * Save.
+     *
+     * @return object|\stdClass $result
+     */
     public function save() {
         $result = (object)array('type' => 'role');
         if ($this->roleid) {
@@ -62,6 +69,17 @@ class condition extends \core_availability\condition {
         return $result;
     }
 
+    /**
+     * Adding the availability to restored course items.
+     *
+     * @param string       $restoreid
+     * @param int          $courseid
+     * @param \base_logger $logger
+     * @param string       $name
+     *
+     * @return bool
+     * @throws \dml_exception
+     */
     public function update_after_restore($restoreid, $courseid, \base_logger $logger, $name) {
         global $DB;
         if (!$this->roleid) {
@@ -86,6 +104,17 @@ class condition extends \core_availability\condition {
         return true;
     }
 
+    /**
+     * Check if the item is available with this restriction.
+     *
+     * @param bool                    $not
+     * @param \core_availability\info $info
+     * @param bool                    $grabthelot
+     * @param int                     $userid
+     *
+     * @return bool
+     * @throws \coding_exception
+     */
     public function is_available($not, \core_availability\info $info, $grabthelot, $userid) {
         global $USER, $CFG;
         $context = \context_course::instance($info->get_course()->id);
@@ -131,6 +160,17 @@ class condition extends \core_availability\condition {
         return $allow;
     }
 
+    /**
+     * Retrieve the description for the restriction.
+     *
+     * @param bool                    $full
+     * @param bool                    $not
+     * @param \core_availability\info $info
+     *
+     * @return string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
     public function get_description($full, $not, \core_availability\info $info) {
         global $DB;
         $context = \context_course::instance($info->get_course()->id);
@@ -144,6 +184,11 @@ class condition extends \core_availability\condition {
         }
     }
 
+    /**
+     * Retrieve debugging string.
+     *
+     * @return string
+     */
     public function get_debug_string() {
         return "Role id: $this->roleid";
     }

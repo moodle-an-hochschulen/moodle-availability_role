@@ -1,22 +1,14 @@
-/**
- * JavaScript for form editing role conditions.
- *
- * @module moodle-availability_role-form
- */
+// JavaScript for form editing role conditions.
+// ...@module moodle-availability_role-form.
 M.availability_role = M.availability_role || {};
 
-/**
- * @class M.availability_role.form
- * @extends M.core_availability.plugin
- */
+// ...@class M.availability_role.form.
+// ...@extends M.core_availability.plugin.
 M.availability_role.form = Y.Object(M.core_availability.plugin);
 
-/**
- * Roles available for selection.
- *
- * @property roles
- * @type Array
- */
+// Roles available for selection.
+// ...@property roles.
+// ...@type Array.
 M.availability_role.form.roles = null;
 
 /**
@@ -31,10 +23,10 @@ M.availability_role.form.initInner = function(roles) {
 
 M.availability_role.form.getNode = function(json) {
     // Create HTML structure.
-    var strings = M.str.availability_role;
-    var html = '<label>' + strings.title + ' <span class="availability-group">' +
+    var html = '<label>' + M.util.get_string('title', 'availability_role') + ' ' +
+            '<span class="availability-group">' +
             '<select name="id">' +
-            '<option value="choose">' + M.str.moodle.choosedots + '</option>';
+            '<option value="choose">' + M.util.get_string('choosedots', 'moodle') + '</option>';
     Y.each(this.roles, function(role) {
         html += '<option value="' + role.id + '">' + role.name + '</option>';
     });

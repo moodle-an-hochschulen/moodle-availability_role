@@ -18,7 +18,8 @@
  * Availability role - Frontend form
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+ *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,11 +31,21 @@ defined('MOODLE_INTERNAL') || die();
  * Availability role - Frontend form class
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com> on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
+ * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
+ *             on behalf of Alexander Bias Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class frontend extends \core_availability\frontend {
 
+    /**
+     * Get the initial parameters needed for JavaScript.
+     *
+     * @param \stdClass          $course
+     * @param \cm_info|null      $cm
+     * @param \section_info|null $section
+     *
+     * @return array
+     */
     protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
         // Change to JS array format and return.
         $jsarray = array();
@@ -53,6 +64,15 @@ class frontend extends \core_availability\frontend {
         return array($jsarray);
     }
 
+    /**
+     * Get the course roles for a specific context.
+     *
+     * @param \context          $context
+     *
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
     protected function get_course_roles($context) {
         global $DB, $CFG;
 
@@ -85,6 +105,16 @@ class frontend extends \core_availability\frontend {
         return $contextroles;
     }
 
+    /**
+     * Decides whether this plugin should be available in a given course. The plugin can do this depending on course or
+     * system settings. Default returns true.
+     *
+     * @param \stdClass          $course
+     * @param \cm_info|null      $cm
+     * @param \section_info|null $section
+     *
+     * @return bool
+     */
     protected function allow_add($course, \cm_info $cm = null, \section_info $section = null) {
         return true;
     }
