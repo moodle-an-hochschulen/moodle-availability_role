@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.7-r1
 
 * 2019-06-11 - Make codechecker happy.
 * 2019-06-11 - Prepare compatibility for Moodle 3.7.
