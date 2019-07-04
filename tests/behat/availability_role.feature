@@ -87,14 +87,11 @@ Feature: availability_role
   @javascript
   Scenario: Guest role
     # Basic setup.
-    Given I log in as "admin"
-    Given I navigate to "Plugins > Availability restrictions > Restriction by course role" in site administration
-    And I set the following fields to these values:
-      | Guest role | Yes |
-    And I press "Save changes"
+    Given the following config values are set as admin:
+      | config                   | value | plugin            |
+      | setting_supportguestrole | YES   | availability_role |
 
-    When I log out
-    And I log in as "teacher1"
+    When I log in as "teacher1"
     And I am on "Course 1" course homepage
 
     Given I navigate to "Users > Enrolment methods" in current page administration

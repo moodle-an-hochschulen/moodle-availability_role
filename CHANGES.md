@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2019-07-04 - Optimized behat steps.
+
 ### v3.7-r1
 
 * 2019-06-11 - Make codechecker happy.
