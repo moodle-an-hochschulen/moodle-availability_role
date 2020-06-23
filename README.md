@@ -3,7 +3,7 @@ moodle-availability_role
 
 [![Build Status](https://travis-ci.org/moodleuulm/moodle-availability_role.svg?branch=master)](https://travis-ci.org/moodleuulm/moodle-availability_role)
 
-Moodle availability plugin which lets users restrict resources, activities and sections based on roles
+Moodle availability plugin which lets users restrict resources, activities and sections based on roles.
 
 
 Requirements
@@ -15,7 +15,7 @@ This plugin requires Moodle 3.8+
 Motivation for this plugin
 --------------------------
 
-If your teachers want to restrict activities / resources / sections in their course to a subset of the course participants and these course participants share a common course role, this plugin is for you.
+If your teachers want to restrict activities / resources / sections in their course to a subset of the course participants and these course participants share a common course role, a course category role or global role, this plugin is for you.
 
 Have a look at an example:
 

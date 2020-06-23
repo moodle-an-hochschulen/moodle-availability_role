@@ -47,17 +47,49 @@ class frontend extends \core_availability\frontend {
      * @return array
      */
     protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
+        global $CFG, $DB;
+        require_once($CFG->dirroot . '/availability/condition/role/classes/condition.php');
+
         // Change to JS array format and return.
+        $idcourse = get_string('course');
+        $idcoursecat = get_string('coursecategory');
+        $idglobal = get_string('coresystem');
         $jsarray = array();
-        $context = \context_course::instance($course->id);
 
         // Get all roles for course.
+        $context = \context_course::instance($course->id);
         $roles = $this->get_course_roles($context);
 
         foreach ($roles as $rec) {
             $jsarray[] = (object)array(
                 'id' => $rec->id,
-                'name' => $rec->localname
+                'name' => $rec->localname,
+                'type' => $idcourse,
+                'typeid' => \availability_role\condition::ROLETYPE_COURSE,
+            );
+        }
+
+        $roles = explode(',', get_config('availability_role', 'coursecatroles'));
+        foreach ($roles as $rec) {
+            $rec = $DB->get_record('role', array('id' => $rec));
+            if (empty($rec->id))  continue;
+            $jsarray[] = (object)array(
+                'id' => $rec->id,
+                'name' => (!empty($rec->name) ? $rec->name : $rec->shortname),
+                'type' => $idcoursecat,
+                'typeid' => \availability_role\condition::ROLETYPE_COURSECAT,
+            );
+        }
+
+        $roles = explode(',', get_config('availability_role', 'globalroles'));
+        foreach ($roles as $rec) {
+            $rec = $DB->get_record('role', array('id' => $rec));
+            if (empty($rec->id))  continue;
+            $jsarray[] = (object)array(
+                'id' => $rec->id,
+                'name' => (!empty($rec->name) ? $rec->name : $rec->shortname),
+                'type' => $idglobal,
+                'typeid' => \availability_role\condition::ROLETYPE_CORE,
             );
         }
 
