@@ -22,25 +22,27 @@ M.availability_role.form.initInner = function(roles) {
 };
 
 M.availability_role.form.getNode = function(json) {
-    console.log('json', json);
     // Create HTML structure.
     var html = '<label>' + M.util.get_string('title', 'availability_role') + ' ' +
             '<span class="availability-group">' +
             '<select name="id">' +
             '<option value="choose">' + M.util.get_string('choosedots', 'moodle') + '</option>';
-    var roles = this.roles;
     var curroletypeid = -1;
     var optopen = false;
     Y.each(this.roles, function(role) {
         if (role.typeid != curroletypeid) {
             curroletypeid = role.typeid;
-            if (optopen) html += '</optgroup>';
+            if (optopen) {
+                html += '</optgroup>';
+            }
             html += '<optgroup label="' + role.type + '">';
             optopen = true;
         }
         html += '<option value="' + role.typeid + '_' + role.id + '">' + role.name + '</option>';
     });
-    if (optopen) html += '</optgroup>';
+    if (optopen) {
+        html += '</optgroup>';
+    }
     html += '</select></span></label>';
     var node = Y.Node.create('<span>' + html + '</span>');
 
@@ -65,7 +67,6 @@ M.availability_role.form.getNode = function(json) {
 
 M.availability_role.form.fillValue = function(value, node) {
     var selected = node.one('select[name=id]').get('value');
-    console.log('fillvalue', value, node, selected);
     if (selected === 'choose') {
         value.id = 'choose';
     } else {
@@ -73,7 +74,6 @@ M.availability_role.form.fillValue = function(value, node) {
         value.typeid = parseInt(selected[0], 10);
         value.id = parseInt(selected[1], 10);
     }
-    console.log('value', value);
 };
 
 M.availability_role.form.fillErrors = function(errors, node) {
