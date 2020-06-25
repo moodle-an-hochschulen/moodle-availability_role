@@ -54,12 +54,19 @@ if ($ADMIN->fulltree) {
                 ORDER BY r.name ASC";
     $roles = $DB->get_records_sql($sql, array(CONTEXT_COURSECAT));
     $options = array();
-    foreach($roles AS $role) {
+    foreach ($roles as $role) {
         $options[$role->id] = (!empty($role->name) ? $role->name : $role->shortname);
     }
 
-    $settings->add(new admin_setting_configmultiselect('availability_role/coursecatroles', get_string('setting_coursecatroles', 'availability_role'),
-                       get_string('setting_coursecatroles:description', 'availability_role'), get_config('availability_role', 'coursecatroles'), $options));
+    $settings->add(
+        new admin_setting_configmultiselect(
+            'availability_role/coursecatroles',
+            get_string('setting_coursecatroles', 'availability_role'),
+            get_string('setting_coursecatroles:description', 'availability_role'),
+            get_config('availability_role', 'coursecatroles'),
+            $options
+        )
+    );
 
     // Global roles.
     $sql = "SELECT r.*
@@ -69,10 +76,17 @@ if ($ADMIN->fulltree) {
                 ORDER BY r.name ASC";
     $roles = $DB->get_records_sql($sql, array(CONTEXT_SYSTEM));
     $options = array();
-    foreach($roles AS $role) {
+    foreach ($roles as $role) {
         $options[$role->id] = (!empty($role->name) ? $role->name : $role->shortname);
     }
 
-    $settings->add(new admin_setting_configmultiselect('availability_role/globalroles', get_string('setting_globalroles', 'availability_role'),
-                       get_string('setting_globalroles:description', 'availability_role'), get_config('availability_role', 'globalroles'), $options));
+    $settings->add(
+        new admin_setting_configmultiselect(
+            'availability_role/globalroles',
+            get_string('setting_globalroles', 'availability_role'),
+            get_string('setting_globalroles:description', 'availability_role'),
+            get_config('availability_role', 'globalroles'),
+            $options
+        )
+    );
 }
