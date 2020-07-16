@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2020-07-16 - Prepare compatibility for Moodle 3.9.
+
 ### v3.8-r1
 
 * 2020-02-13 - Prepare compatibility for Moodle 3.8.
