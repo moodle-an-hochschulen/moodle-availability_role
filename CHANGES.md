@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2021-02-05 - Move Moodle Plugin CI from Travis CI to Github actions
+
 ### v3.10-r1
 
 * 2021-01-09 - Fix PHPUnit function declaration for Moodle 3.10.

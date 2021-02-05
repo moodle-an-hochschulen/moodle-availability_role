@@ -1,7 +1,7 @@
 moodle-availability_role
 ========================
 
-[![Build Status](https://travis-ci.com/moodleuulm/moodle-availability_role.svg?branch=master)](https://travis-ci.com/moodleuulm/moodle-availability_role)
+[![Moodle Plugin CI](https://github.com/moodleuulm/moodle-availability_role/workflows/Moodle%20Plugin%20CI/badge.svg?branch=MOODLE_310_STABLE)](https://github.com/moodleuulm/moodle-availability_role/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_310_STABLE)
 
 Moodle availability plugin which lets users restrict resources, activities and sections based on roles
 
