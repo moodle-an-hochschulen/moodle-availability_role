@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.10-r2
 
 * 2021-02-05 - Move Moodle Plugin CI from Travis CI to Github actions
 
