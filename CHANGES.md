@@ -7,6 +7,7 @@ Changes
 ### Unreleased
 
 * 2021-06-13 - Prepare compatibility for Moodle 3.11.
+* 2021-06-13 - Added definition for a PHPUnit availability_role_testsuite.
 
 ### v3.10-r2
 
