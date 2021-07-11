@@ -2,7 +2,7 @@ YUI.add('moodle-availability_role-form', function (Y, NAME) {
 
 // JavaScript for form editing role conditions.
 // ...@module moodle-availability_role-form.
-M.availability_role = M.availability_role || {};
+M.availability_role = M.availability_role || {}; // eslint-disable-line camelcase
 
 // ...@class M.availability_role.form.
 // ...@extends M.core_availability.plugin.
