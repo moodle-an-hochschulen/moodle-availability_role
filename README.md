@@ -133,15 +133,26 @@ PHP7 Support
 Since Moodle 3.4 core, PHP7 is mandatory. We are developing and testing this plugin for PHP7 only.
 
 
+Maintainers
+-----------
+
+Ulm University\
+Communication and Information Centre (kiz)\
+Alexander Bias
+
+Bern University of Applied Sciences\
+Luca Bösch
+
+
 Copyright
 ---------
 
-Bence Laky
-Synergy Learning UK
+Bence Laky\
+Synergy Learning UK\
 www.synergy-learning.com
 
 on behalf of
 
-Ulm University
-Communication and Information Centre (kiz)
+Ulm University\
+Communication and Information Centre (kiz)\
 Alexander Bias
