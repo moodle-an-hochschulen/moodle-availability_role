@@ -46,6 +46,12 @@ Teachers (and other users with editing rights) can add the "Role" availability c
 If you want to learn more about using availability plugins in Moodle, please see https://docs.moodle.org/en/Restrict_access.
 
 
+Capabilities
+------------
+
+This plugin does not add any additional capabilities.
+
+
 How this plugin works / Pitfalls
 --------------------------------
 
