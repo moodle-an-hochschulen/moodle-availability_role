@@ -109,3 +109,45 @@ Feature: availability_role
     And I log in as "student2"
     And I am on "Course 1" course homepage
     Then I should see "P1" in the "region-main" "region"
+
+  Scenario: Add role condition for the non-logged-in role to a page activity and try to view it with a logged-in student and a not-logged-in user
+    Given the following "roles" exist:
+      | name    | shortname | description | archetype |
+      | Visitor | visitor   | Visitor     | guest     |
+    And the following config values are set as admin:
+      | config                         | value | plugin            |
+      | setting_supportnotloggedinrole | YES   | availability_role |
+    And the following config values are set as admin:
+      | config                         | value |
+      | guestloginbutton               | 1     |
+    And I log in as "admin"
+    And I navigate to "Users > Permissions > User policies" in site administration
+    And I set the field "Role for visitors" to "Visitor (visitor)"
+    And I press "Save changes"
+    And I log out
+    And I log in as "teacher1"
+    And I am on the "Course 1" "enrolment methods" page
+    And I click on "Edit" "link" in the "Guest access" "table_row"
+    And I set the following fields to these values:
+      | Allow guest access | Yes |
+    And I press "Save changes"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "Page" to section "1"
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    And I set the field "Role" to "Visitor"
+    And I click on ".availability-item .availability-eye img" "css_element"
+    And I set the following fields to these values:
+      | Name         | P1 |
+      | Description  | x  |
+      | Page content | x  |
+    And I click on "Save and return to course" "button"
+    When I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    Then I should not see "P1" in the "region-main" "region"
+    When I log out
+    And I log in as "guest"
+    And I am on "Course 1" course homepage
+    Then I should see "P1" in the "region-main" "region"
