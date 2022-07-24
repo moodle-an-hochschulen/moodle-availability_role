@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v4.0-r1
 
 * 2022-07-12 - Fix availability form styling (which didn't use Bootstrap styles up to now)
 * 2022-07-12 - Add a missing test for the not-logged-in role.
