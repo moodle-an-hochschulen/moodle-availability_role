@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v3.10-r5
 
 * 2022-07-12 - Fix availability form styling (which didn't use Bootstrap styles up to now)
 
