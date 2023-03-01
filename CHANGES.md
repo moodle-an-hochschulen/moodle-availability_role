@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2023-01-21 - Prepare compatibility for Moodle 4.1.
 * 2022-02-28 - Fix location of Bootstrap in phpunit.xml
 * 2022-11-28 - Updated Moodle Plugin CI to latest upstream recommendations
 
