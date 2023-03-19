@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v4.1-r1
 
 * 2023-01-21 - Prepare compatibility for Moodle 4.1.
 * 2022-02-28 - Fix location of Bootstrap in phpunit.xml
