@@ -33,6 +33,7 @@ $string['pluginname'] = 'Restriction by course role';
 $string['privacy:metadata'] = 'The Restriction by course role plugin does not store any personal data.';
 $string['requires_role'] = 'You are a(n) <em>{$a}</em>';
 $string['requires_notrole'] = 'You are not a(n) <em>{$a}</em>';
+$string['role:addinstance'] = 'Add role conditions to activities';
 $string['setting_coursecatroles'] = 'Supported roles';
 $string['setting_coursecatroles:description'] = 'Specify which courecategory roles are selectable by users to restrict access.';
 $string['setting_globalroles'] = 'Supported roles';
