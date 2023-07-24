@@ -146,6 +146,17 @@ class frontend extends \core_availability\frontend {
      * @return bool
      */
     protected function allow_add($course, \cm_info $cm = null, \section_info $section = null) {
+
+        if ($cm) {
+            $context = $cm->context;
+        } else {
+            $context = \context_course::instance($course->id);
+        }
+
+        if (!has_capability('availability/role:addinstance', $context)) {
+            return false;
+        }
+
         return true;
     }
 }
