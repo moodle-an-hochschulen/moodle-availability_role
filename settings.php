@@ -63,7 +63,7 @@ if ($ADMIN->fulltree) {
             'availability_role/coursecatroles',
             get_string('setting_coursecatroles', 'availability_role'),
             get_string('setting_coursecatroles:description', 'availability_role'),
-            get_config('availability_role', 'coursecatroles'),
+            [],
             $options
         )
     );
@@ -85,7 +85,7 @@ if ($ADMIN->fulltree) {
             'availability_role/globalroles',
             get_string('setting_globalroles', 'availability_role'),
             get_string('setting_globalroles:description', 'availability_role'),
-            get_config('availability_role', 'globalroles'),
+            [],
             $options
         )
     );
