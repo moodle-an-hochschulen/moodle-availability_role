@@ -67,10 +67,15 @@ class frontend extends \core_availability\frontend {
             ];
         }
 
-        $roles = explode(',', get_config('availability_role', 'coursecatroles'));
-        foreach ($roles as $rec) {
-            $rec = $DB->get_record('role', ['id' => $rec]);
-            if (empty($rec->id))  continue;
+        $roleids = explode(',', get_config('availability_role', 'coursecatroles'));
+        foreach ($roleids as $roleid) {
+            if(empty($roleid)){
+                continue;
+            }
+            $rec = $DB->get_record('role', ['id' => $roleid]);
+            if (empty($rec->id)) {
+                continue;
+            }
             $jsarray[] = (object)[
                 'id' => $rec->id,
                 'name' => (!empty($rec->name) ? $rec->name : $rec->shortname),
@@ -79,10 +84,15 @@ class frontend extends \core_availability\frontend {
             ];
         }
 
-        $roles = explode(',', get_config('availability_role', 'globalroles'));
-        foreach ($roles as $rec) {
-            $rec = $DB->get_record('role', ['id' => $rec]);
-            if (empty($rec->id))  continue;
+        $roleids = explode(',', get_config('availability_role', 'globalroles'));
+        foreach ($roleids as $roleid) {
+            if (empty($roleid)) {
+                continue;
+            }
+            $rec = $DB->get_record('role', ['id' => $roleid]);
+            if (empty($rec->id)) {
+                continue;
+            }
             $jsarray[] = (object)[
                 'id' => $rec->id,
                 'name' => (!empty($rec->name) ? $rec->name : $rec->shortname),
