@@ -46,20 +46,20 @@ class frontend extends \core_availability\frontend {
      */
     protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
         // Change to JS array format and return.
-        $jsarray = array();
+        $jsarray = [];
         $context = \context_course::instance($course->id);
 
         // Get all roles for course.
         $roles = $this->get_course_roles($context);
 
         foreach ($roles as $rec) {
-            $jsarray[] = (object)array(
+            $jsarray[] = (object)[
                 'id' => $rec->id,
-                'name' => $rec->localname
-            );
+                'name' => $rec->localname,
+            ];
         }
 
-        return array($jsarray);
+        return [$jsarray];
     }
 
     /**
