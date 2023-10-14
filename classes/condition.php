@@ -58,7 +58,7 @@ class condition extends \core_availability\condition {
      * @return object|\stdClass $result
      */
     public function save() {
-        $result = (object)array('type' => 'role');
+        $result = (object)['type' => 'role'];
         if ($this->roleid) {
             $result->id = $this->roleid;
         } else {
@@ -88,7 +88,7 @@ class condition extends \core_availability\condition {
         if (!$rec || !$rec->newitemid) {
             // If we are on the same course (e.g. duplicate) then we can just
             // use the existing one.
-            if ($DB->record_exists('role', array('id' => $this->roleid))) {
+            if ($DB->record_exists('role', ['id' => $this->roleid])) {
                 return false;
             }
             // Otherwise it's a warning.
@@ -172,7 +172,7 @@ class condition extends \core_availability\condition {
     public function get_description($full, $not, \core_availability\info $info) {
         global $DB;
         $context = \context_course::instance($info->get_course()->id);
-        $role = $DB->get_record('role', array('id' => $this->roleid));
+        $role = $DB->get_record('role', ['id' => $this->roleid]);
         if (!$role) {
             $missing = get_string('missing', 'availability_role');
             return get_string($not ? 'requires_notrole' : 'requires_role', 'availability_role', $missing);

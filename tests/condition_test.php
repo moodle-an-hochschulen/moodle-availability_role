@@ -59,7 +59,7 @@ class condition_test extends \advanced_testcase {
         $course = $generator->create_course();
         $teacher = $generator->create_user();
         $student = $generator->create_user();
-        $roleswithnames = array();
+        $roleswithnames = [];
         $contextroleids = get_roles_for_contextlevels(CONTEXT_COURSE);
         $roles = $DB->get_records_list('role', 'id', $contextroleids, '', 'shortname, id');
         $generator->enrol_user($student->id, $course->id, $roles['student']->id);
@@ -68,7 +68,7 @@ class condition_test extends \advanced_testcase {
         $teacherinfo = new \core_availability\mock_info($course, $teacher->id);
 
         // Do test (not in grouping).
-        $structure = (object)array('type' => 'role', 'id' => (int) $roles['editingteacher']->id);
+        $structure = (object)['type' => 'role', 'id' => (int) $roles['editingteacher']->id];
         $cond = new condition($structure);
 
         // Check if available (when not available).
@@ -83,7 +83,7 @@ class condition_test extends \advanced_testcase {
      * @covers \availability_role\condition::save()
      */
     public function test_save() {
-        $structure = (object)array('id' => 123);
+        $structure = (object)['id' => 123];
         $cond = new condition($structure);
         $structure->type = 'role';
         $this->assertEquals($structure, $cond->save());
