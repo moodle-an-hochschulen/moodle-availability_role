@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v4.2-r1
 
 * 2023-09-01 - Prepare compatibility for Moodle 4.2.
 
