@@ -59,7 +59,7 @@ class frontend extends \core_availability\frontend {
         $roles = $this->get_course_roles($context);
 
         foreach ($roles as $rec) {
-            $jsarray[] = (object)array(
+            $jsarray[] = (object)[
                 'id' => $rec->id,
                 'name' => $rec->localname,
                 'type' => $idcourse,
