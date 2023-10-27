@@ -23,9 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-use availability_role\condition;
+namespace availability_role;
 
 /**
  * Availability role - Unit tests for the condition
@@ -35,7 +33,7 @@ use availability_role\condition;
  *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class availability_role_condition_testcase extends advanced_testcase {
+class condition_test extends \advanced_testcase {
     /**
      * Load required classes.
      */
@@ -47,6 +45,9 @@ class availability_role_condition_testcase extends advanced_testcase {
 
     /**
      * Tests constructing and using condition.
+     *
+     * @covers \availability_role\condition::is_available()
+     * @covers \availability_role\condition::get_description()
      */
     public function test_usage() {
         global $CFG, $USER, $DB;
@@ -78,6 +79,8 @@ class availability_role_condition_testcase extends advanced_testcase {
 
     /**
      * Tests the save() function.
+     *
+     * @covers \availability_role\condition::save()
      */
     public function test_save() {
         $structure = (object)array('id' => 123);

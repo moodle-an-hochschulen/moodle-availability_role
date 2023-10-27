@@ -4,6 +4,41 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2023-04-30 - Tests: Updated Moodle Plugin CI to use PHP 8.1 and Postgres 13 from Moodle 4.1 on.
+
+### v4.1-r1
+
+* 2023-01-21 - Prepare compatibility for Moodle 4.1.
+* 2022-02-28 - Fix location of Bootstrap in phpunit.xml
+* 2022-11-28 - Updated Moodle Plugin CI to latest upstream recommendations
+
+### v4.0-r1
+
+* 2022-07-12 - Fix availability form styling (which didn't use Bootstrap styles up to now)
+* 2022-07-12 - Add a missing test for the not-logged-in role.
+* 2022-07-12 - Fix Behat tests which broke with Moodle 4.0.
+* 2022-07-12 - Make codechecker happy again
+* 2022-07-12 - Prepare compatibility for Moodle 4.0.
+
+### v3.11-r3
+
+* 2022-07-10 - Add Visual checks section to UPGRADE.md
+* 2022-07-10 - Add Capabilities section to README.md
+
+### v3.11-r2
+
+* 2022-06-26 - Make codechecker happy again
+* 2022-06-26 - Updated Moodle Plugin CI to latest upstream recommendations
+* 2022-06-26 - Add UPGRADE.md as internal upgrade documentation
+* 2022-06-26 - Update maintainers and copyrights in README.md.
+
+### v3.11-r1
+
+* 2021-06-13 - Prepare compatibility for Moodle 3.11.
+* 2021-06-13 - Added definition for a PHPUnit availability_role_testsuite.
+
 ### v3.10-r2
 
 * 2021-02-05 - Move Moodle Plugin CI from Travis CI to Github actions
