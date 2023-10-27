@@ -57,11 +57,10 @@ class frontend extends \core_availability\frontend {
         // Get all roles for course.
         $context = \context_course::instance($course->id);
         $roles = $this->get_course_roles($context);
-
         foreach ($roles as $rec) {
-            $jsarray[] = (object)[
+            $jsarray[] = (object)array(
                 'id' => $rec->id,
-                'name' => $rec->localname,
+                'name' => (!empty($rec->name) ? $rec->name : $rec->localname),
                 'type' => $idcourse,
                 'typeid' => \availability_role\condition::ROLETYPE_COURSE,
             );
