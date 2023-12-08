@@ -86,6 +86,7 @@ class condition_test extends \advanced_testcase {
         $structure = (object)['id' => 123];
         $cond = new condition($structure);
         $structure->type = 'role';
+        $structure->typeid = 0;
         $this->assertEquals($structure, $cond->save());
     }
 }

@@ -27,16 +27,29 @@ M.availability_role.form.getNode = function(json) {
             '<span class="availability-group">' +
             '<select name="id" class="custom-select">' +
             '<option value="choose">' + M.util.get_string('choosedots', 'moodle') + '</option>';
+    var curroletypeid = -1;
+    var optopen = false;
     Y.each(this.roles, function(role) {
-        html += '<option value="' + role.id + '">' + role.name + '</option>';
+        if (role.typeid != curroletypeid) {
+            curroletypeid = role.typeid;
+            if (optopen) {
+                html += '</optgroup>';
+            }
+            html += '<optgroup label="' + role.type + '">';
+            optopen = true;
+        }
+        html += '<option value="' + role.typeid + '_' + role.id + '">' + role.name + '</option>';
     });
+    if (optopen) {
+        html += '</optgroup>';
+    }
     html += '</select></span></label>';
     var node = Y.Node.create('<span>' + html + '</span>');
 
     // Set initial value if specified.
     if (json.id !== undefined &&
-            node.one('select[name=id] > option[value=' + json.id + ']')) {
-        node.one('select[name=id]').set('value', '' + json.id);
+            node.one('select[name=id] option[value=' + json.typeid + '_' + json.id + ']')) {
+        node.one('select[name=id]').set('value', json.typeid + '_' + json.id);
     }
 
     // Add event handlers (first time only).
@@ -57,7 +70,9 @@ M.availability_role.form.fillValue = function(value, node) {
     if (selected === 'choose') {
         value.id = 'choose';
     } else {
-        value.id = parseInt(selected, 10);
+        selected = selected.split('_');
+        value.typeid = parseInt(selected[0], 10);
+        value.id = parseInt(selected[1], 10);
     }
 };
 
