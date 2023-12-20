@@ -3,19 +3,19 @@ moodle-availability_role
 
 [![Moodle Plugin CI](https://github.com/moodle-an-hochschulen/moodle-availability_role/workflows/Moodle%20Plugin%20CI/badge.svg?branch=MOODLE_402_STABLE)](https://github.com/moodle-an-hochschulen/moodle-availability_role/actions?query=workflow%3A%22Moodle+Plugin+CI%22+branch%3AMOODLE_402_STABLE)
 
-Moodle availability plugin which lets users restrict resources, activities and sections based on roles
+Moodle availability plugin which lets users restrict resources, activities and sections based on roles.
 
 
 Requirements
 ------------
 
-This plugin requires Moodle 4.2+
+This plugin requires Moodle 4.3+
 
 
 Motivation for this plugin
 --------------------------
 
-If your teachers want to restrict activities / resources / sections in their course to a subset of the course participants and these course participants share a common course role, this plugin is for you.
+If your teachers want to restrict activities / resources / sections in their course to a subset of the course participants and these course participants share a common course role, a course category role or global role, this plugin is for you.
 
 Have a look at an example:
 
