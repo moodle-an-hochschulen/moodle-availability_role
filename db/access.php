@@ -15,21 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Availability role - Version file
+ * availability_role access.
  *
  * @package    availability_role
- * @copyright  2015 Bence Laky, Synergy Learning UK <b.laky@intrallect.com>
- *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
- *             extended to coursecat- and global roles
- *                 by Robert Schrenk, Center for Learningmanagement <robert.schrenk@lernmanagement.at>
+ * @copyright  2023 ISB Bayern
+ * @author     Dr. Peter Mayer
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'availability_role';
-$plugin->version = 2023102001;
-$plugin->release = 'v4.3-r1';
-$plugin->requires = 2023100900;
-$plugin->supported = [403, 403];
-$plugin->maturity = MATURITY_STABLE;
+$capabilities = array(
+
+    'availability/role:addinstance'      => array(
+        'captype'      => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes'   => array(
+            'manager'        => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+        )
+    ),
+);
