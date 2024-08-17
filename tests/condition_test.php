@@ -33,7 +33,7 @@ namespace availability_role;
  *             on behalf of Alexander Bias, Ulm University <alexander.bias@uni-ulm.de>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class condition_test extends \advanced_testcase {
+final class condition_test extends \advanced_testcase {
     /**
      * Load required classes.
      */
@@ -49,7 +49,7 @@ class condition_test extends \advanced_testcase {
      * @covers \availability_role\condition::is_available()
      * @covers \availability_role\condition::get_description()
      */
-    public function test_usage() {
+    public function test_usage(): void {
         global $CFG, $USER, $DB;
         $this->resetAfterTest();
         $CFG->enableavailability = true;
@@ -82,7 +82,7 @@ class condition_test extends \advanced_testcase {
      *
      * @covers \availability_role\condition::save()
      */
-    public function test_save() {
+    public function test_save(): void {
         $structure = (object)['id' => 123];
         $cond = new condition($structure);
         $structure->type = 'role';
