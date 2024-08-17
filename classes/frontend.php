@@ -44,7 +44,7 @@ class frontend extends \core_availability\frontend {
      *
      * @return array
      */
-    protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
+    protected function get_javascript_init_params($course, ?\cm_info $cm = null, ?\section_info $section = null) {
         // Change to JS array format and return.
         $jsarray = [];
         $context = \context_course::instance($course->id);
@@ -113,7 +113,7 @@ class frontend extends \core_availability\frontend {
      *
      * @return bool
      */
-    protected function allow_add($course, \cm_info $cm = null, \section_info $section = null) {
+    protected function allow_add($course, ?\cm_info $cm = null, ?\section_info $section = null) {
         return true;
     }
 }
