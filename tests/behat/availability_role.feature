@@ -25,7 +25,7 @@ Feature: availability_role
   Scenario: Add role condition for the teacher role to a page activity and try to view it as teacher (who will see it)
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Page" to section "1"
+    And I add a page to section "1" using the activity chooser
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
@@ -44,7 +44,7 @@ Feature: availability_role
   Scenario: Add role condition for the teacher role to a page activity and try to view it as student (who will not see it)
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Page" to section "1"
+    And I add a page to section "1" using the activity chooser
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
@@ -63,7 +63,7 @@ Feature: availability_role
   Scenario: Add role condition for the teacher role to a page activity and try to view it as manager (who will see it although he isn't a teacher)
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Page" to section "1"
+    And I add a page to section "1" using the activity chooser
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
@@ -90,7 +90,7 @@ Feature: availability_role
       | Allow guest access | Yes |
     And I press "Save changes"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Page" to section "1"
+    And I add a page to section "1" using the activity chooser
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
@@ -132,7 +132,7 @@ Feature: availability_role
       | Allow guest access | Yes |
     And I press "Save changes"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Page" to section "1"
+    And I add a page to section "1" using the activity chooser
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
