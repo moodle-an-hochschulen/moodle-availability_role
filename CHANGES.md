@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2024-10-07 - Prepare compatibility for Moodle 4.5.
+
 ### v4.4-r2
 
 * 2024-10-27 - Tests: Call parent setup() function when instantiating PHPUnit tests.
