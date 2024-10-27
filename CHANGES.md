@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2024-10-27 - Tests: Call parent setup() function when instantiating PHPUnit tests.
+
 ### v4.1-r3
 
 * 2024-08-11 - Add section for scheduled tasks to README
