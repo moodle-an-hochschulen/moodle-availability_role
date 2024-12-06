@@ -44,7 +44,7 @@ class frontend extends \core_availability\frontend {
      *
      * @return array
      */
-    protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
+    protected function get_javascript_init_params($course, ?\cm_info $cm = null, ?\section_info $section = null) {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/availability/condition/role/classes/condition.php');
 
@@ -148,7 +148,7 @@ class frontend extends \core_availability\frontend {
      *
      * @return bool
      */
-    protected function allow_add($course, \cm_info $cm = null, \section_info $section = null) {
+    protected function allow_add($course, ?\cm_info $cm = null, ?\section_info $section = null) {
         return true;
     }
 }
