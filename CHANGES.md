@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2025-04-14 - Prepare compatibility for Moodle 5.0.
+
 ### v4.5-r1
 
 * 2024-10-14 - Upgrade: Adopt changes from MDL-81818 to remove old bootstrap classes
