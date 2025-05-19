@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2025-05-18 - Feature: Allow the admin to configure which roles can be used, resolves #18
+
 ### v4.3-r3
 
 * 2024-10-27 - Tests: Call parent setup() function when instantiating PHPUnit tests.

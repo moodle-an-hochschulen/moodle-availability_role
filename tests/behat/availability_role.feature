@@ -41,7 +41,7 @@ Feature: availability_role
     And I am on "Course 1" course homepage
     Then I should see "P1" in the "region-main" "region"
 
-  Scenario: Add role condition for the teacher role to a page activity and try to view it as student (who will not see it)
+  Scenario: Add role condition for the teacher role to a page activity and try to view it as student (who will not see it at all)
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Page" to section "1"
@@ -59,6 +59,25 @@ Feature: availability_role
     And I log in as "student1"
     And I am on "Course 1" course homepage
     Then I should not see "P1" in the "region-main" "region"
+
+  Scenario: Add role condition for the teacher role to a page activity and try to view it as student (who will see the availability message)
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a page to section "1" using the activity chooser
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    And I set the field "Role" to "Teacher"
+    And I set the following fields to these values:
+      | Name         | P1 |
+      | Description  | x  |
+      | Page content | x  |
+    And I click on "Save and return to course" "button"
+    When I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    Then I should see "P1" in the "region-main" "region"
+    And I should see "Not available unless: You are a(n) Teacher" in the "region-main" "region"
 
   Scenario: Add role condition for the teacher role to a page activity and try to view it as manager (who will see it although he isn't a teacher)
     And I log in as "teacher1"
@@ -151,3 +170,28 @@ Feature: availability_role
     And I log in as "guest"
     And I am on "Course 1" course homepage
     Then I should see "P1" in the "region-main" "region"
+
+  Scenario: Limit the roles which can be used in the condition to the teacher role
+    When I log in as "admin"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a page to section "1" using the activity chooser
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    Then I should see "Teacher" in the ".availability_role select" "css_element"
+    And I should see "Student" in the ".availability_role select" "css_element"
+    And I should see "Manager" in the ".availability_role select" "css_element"
+    And I should see "Non-editing teacher" in the ".availability_role select" "css_element"
+    And I navigate to "Plugins > Availability restrictions > Restriction by course role" in site administration
+    And I click on "Manager" "checkbox"
+    And I click on "Non-editing teacher" "checkbox"
+    And I press "Save changes"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a page to section "1" using the activity chooser
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    Then I should see "Teacher" in the ".availability_role select" "css_element"
+    And I should see "Student" in the ".availability_role select" "css_element"
+    And I should not see "Manager" in the ".availability_role select" "css_element"
+    And I should not see "Non-editing teacher" in the ".availability_role select" "css_element"
