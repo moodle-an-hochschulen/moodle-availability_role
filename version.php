@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'availability_role';
-$plugin->version = 2023010504;
-$plugin->release = 'v4.1-r4';
+$plugin->version = 2023010505;
+$plugin->release = 'v4.1-r5';
 $plugin->requires = 2022112800;
 $plugin->supported = [401, 401];
 $plugin->maturity = MATURITY_STABLE;

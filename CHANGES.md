@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v4.1-r5
 
 * 2025-05-18 - Feature: Allow the admin to configure which roles can be used, resolves #18
 
