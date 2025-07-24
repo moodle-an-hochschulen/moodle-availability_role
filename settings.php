@@ -73,5 +73,48 @@ if ($ADMIN->fulltree) {
     $description = get_string('setting_supportnotloggedinrole_desc', 'availability_role', null, true);
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $settings->add($setting);
-}
 
+    // Course category roles.
+    $sql = "SELECT r.*
+                FROM {role} AS r, {role_context_levels} AS rcl
+                WHERE r.id=rcl.roleid
+                    AND rcl.contextlevel = ?
+                ORDER BY r.name ASC";
+    $roles = $DB->get_records_sql($sql, array(CONTEXT_COURSECAT));
+    $options = array();
+    foreach ($roles as $role) {
+        $options[$role->id] = (!empty($role->name) ? $role->name : $role->shortname);
+    }
+
+    $settings->add(
+        new admin_setting_configmultiselect(
+            'availability_role/coursecatroles',
+            get_string('setting_coursecatroles', 'availability_role'),
+            get_string('setting_coursecatroles:description', 'availability_role'),
+            get_config('availability_role', 'coursecatroles'),
+            $options
+        )
+    );
+
+    // Global roles.
+    $sql = "SELECT r.*
+                FROM {role} AS r, {role_context_levels} AS rcl
+                WHERE r.id=rcl.roleid
+                    AND rcl.contextlevel = ?
+                ORDER BY r.name ASC";
+    $roles = $DB->get_records_sql($sql, array(CONTEXT_SYSTEM));
+    $options = array();
+    foreach ($roles as $role) {
+        $options[$role->id] = (!empty($role->name) ? $role->name : $role->shortname);
+    }
+
+    $settings->add(
+        new admin_setting_configmultiselect(
+            'availability_role/globalroles',
+            get_string('setting_globalroles', 'availability_role'),
+            get_string('setting_globalroles:description', 'availability_role'),
+            get_config('availability_role', 'globalroles'),
+            $options
+        )
+    );
+}
