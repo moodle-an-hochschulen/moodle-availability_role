@@ -47,7 +47,6 @@ class frontend extends \core_availability\frontend {
     protected function get_javascript_init_params($course, \cm_info $cm = null, \section_info $section = null) {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/availability/condition/role/classes/condition.php');
-
         // Change to JS array format and return.
         $idcourse = get_string('course');
         $idcoursecat = get_string('coursecategory');
@@ -109,7 +108,12 @@ class frontend extends \core_availability\frontend {
     protected function get_course_roles($context) {
         global $DB, $CFG;
 
-        $contextroleids = get_roles_for_contextlevels(CONTEXT_COURSE);
+        // Get and implode the roles which have been enabled in the settings.
+        $contextroleids = [];
+        $enabledroles = get_config('availability_role', 'setting_supportedroles');
+        if (!empty($enabledroles)) {
+            $contextroleids = explode(',', $enabledroles);
+        }
 
         // Add guest role, if desired and guest role exists and is not yet included.
         $guestroleid = get_guest_role()->id;
@@ -148,7 +152,7 @@ class frontend extends \core_availability\frontend {
      *
      * @return bool
      */
-    protected function allow_add($course, \cm_info $cm = null, \section_info $section = null) {
+    protected function allow_add($course, ?\cm_info $cm = null, ?\section_info $section = null) {
         return true;
     }
 }

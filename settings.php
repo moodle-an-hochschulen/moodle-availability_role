@@ -32,6 +32,34 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_heading($name, $title, null);
     $settings->add($setting);
 
+    // Create role chooser options.
+    $roleoptions = [];
+    $roles = get_all_roles();
+    $systemcontext = context_system::instance();
+    $rolenames = role_fix_names($roles, $systemcontext, ROLENAME_ORIGINAL);
+    if (!empty($rolenames)) {
+        foreach ($rolenames as $key => $role) {
+            // If the role cannot be assigned in the course context, skip it.
+            $rolecontextlevels = get_role_contextlevels($role->id);
+            if (!in_array(CONTEXT_COURSE, $rolecontextlevels)) {
+                continue;
+            }
+
+            // If the role is not already in the list, add it.
+            if (!array_key_exists($role->id, $roleoptions)) {
+                $roleoptions[$role->id] = $role->localname;
+            }
+        }
+    }
+
+    // Setting for supported roles.
+    $name = 'availability_role/setting_supportedroles';
+    $title = get_string('setting_supportedroles', 'availability_role', null, true);
+    $description = get_string('setting_supportedroles_desc', 'availability_role', null, true).'<br />'.
+            get_string('setting_supportedroles_note', 'availability_role', null, true);
+    $setting = new admin_setting_configmulticheckbox($name, $title, $description, $roleoptions, $roleoptions);
+    $settings->add($setting);
+
     // Setting for guest role.
     $name = 'availability_role/setting_supportguestrole';
     $title = get_string('setting_supportguestrole', 'availability_role', null, true);

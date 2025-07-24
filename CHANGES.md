@@ -4,6 +4,34 @@ moodle-availability_role
 Changes
 -------
 
+### v5.0-r2
+
+* 2025-05-18 - Feature: Allow the admin to configure which roles can be used, resolves #18
+
+### v5.0-r1
+
+* 2025-04-14 - Prepare compatibility for Moodle 5.0.
+
+### v4.5-r1
+
+* 2024-10-14 - Upgrade: Adopt changes from MDL-81818 to remove old bootstrap classes
+* 2024-10-07 - Prepare compatibility for Moodle 4.5.
+
+### v4.4-r2
+
+* 2024-10-27 - Tests: Call parent setup() function when instantiating PHPUnit tests.
+
+### v4.4-r1
+
+* 2024-08-24 - Development: Rename master branch to main, please update your clones.
+* 2024-08-22 - Upgrade: Replace deprecated Behat steps.
+* 2024-08-20 - Prepare compatibility for Moodle 4.4.
+
+### v4.3-r2
+
+* 2024-08-11 - Add section for scheduled tasks to README
+* 2024-08-11 - Updated Moodle Plugin CI to latest upstream recommendations
+
 ### v4.3-r1
 
 * 2023-10-20 - Prepare compatibility for Moodle 4.3.
