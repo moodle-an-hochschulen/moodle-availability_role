@@ -52,8 +52,8 @@ if ($ADMIN->fulltree) {
                 WHERE r.id=rcl.roleid
                     AND rcl.contextlevel = ?
                 ORDER BY r.name ASC";
-    $roles = $DB->get_records_sql($sql, array(CONTEXT_COURSECAT));
-    $options = array();
+    $roles = $DB->get_records_sql($sql, [CONTEXT_COURSECAT]);
+    $options = [];
     foreach ($roles as $role) {
         $options[$role->id] = (!empty($role->name) ? $role->name : $role->shortname);
     }
@@ -74,8 +74,8 @@ if ($ADMIN->fulltree) {
                 WHERE r.id=rcl.roleid
                     AND rcl.contextlevel = ?
                 ORDER BY r.name ASC";
-    $roles = $DB->get_records_sql($sql, array(CONTEXT_SYSTEM));
-    $options = array();
+    $roles = $DB->get_records_sql($sql, [CONTEXT_SYSTEM]);
+    $options = [];
     foreach ($roles as $role) {
         $options[$role->id] = (!empty($role->name) ? $role->name : $role->shortname);
     }
