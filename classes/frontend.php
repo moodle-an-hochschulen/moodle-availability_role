@@ -52,49 +52,49 @@ class frontend extends \core_availability\frontend {
         $idcourse = get_string('course');
         $idcoursecat = get_string('coursecategory');
         $idglobal = get_string('coresystem');
-        $jsarray = array();
+        $jsarray = [];
 
         // Get all roles for course.
         $context = \context_course::instance($course->id);
         $roles = $this->get_course_roles($context);
         foreach ($roles as $rec) {
-            $jsarray[] = (object)array(
+            $jsarray[] = (object) [
                 'id' => $rec->id,
                 'name' => (!empty($rec->name) ? $rec->name : $rec->localname),
                 'type' => $idcourse,
                 'typeid' => \availability_role\condition::ROLETYPE_COURSE,
-            );
+            ];
         }
 
         $roles = explode(',', get_config('availability_role', 'coursecatroles'));
         foreach ($roles as $rec) {
-            $rec = $DB->get_record('role', array('id' => $rec));
+            $rec = $DB->get_record('role', ['id' => $rec]);
             if (empty($rec->id)) {
                 continue;
             }
-            $jsarray[] = (object)array(
+            $jsarray[] = (object) [
                 'id' => $rec->id,
                 'name' => (!empty($rec->name) ? $rec->name : $rec->shortname),
                 'type' => $idcoursecat,
                 'typeid' => \availability_role\condition::ROLETYPE_COURSECAT,
-            );
+            ];
         }
 
         $roles = explode(',', get_config('availability_role', 'globalroles'));
         foreach ($roles as $rec) {
-            $rec = $DB->get_record('role', array('id' => $rec));
+            $rec = $DB->get_record('role', ['id' => $rec]);
             if (empty($rec->id)) {
                 continue;
             }
-            $jsarray[] = (object)array(
+            $jsarray[] = (object) [
                 'id' => $rec->id,
                 'name' => (!empty($rec->name) ? $rec->name : $rec->shortname),
                 'type' => $idglobal,
                 'typeid' => \availability_role\condition::ROLETYPE_CORE,
-            );
+            ];
         }
 
-        return array($jsarray);
+        return [$jsarray];
     }
 
     /**
