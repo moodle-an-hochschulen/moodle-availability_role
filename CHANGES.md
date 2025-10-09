@@ -4,6 +4,15 @@ moodle-availability_role
 Changes
 -------
 
+### v4.5-r2
+
+* 2025-05-18 - Feature: Allow the admin to configure which roles can be used, resolves #18
+
+### v4.5-r1
+
+* 2024-10-14 - Upgrade: Adopt changes from MDL-81818 to remove old bootstrap classes
+* 2024-10-07 - Prepare compatibility for Moodle 4.5.
+
 ### v4.4-r2
 
 * 2024-10-27 - Tests: Call parent setup() function when instantiating PHPUnit tests.

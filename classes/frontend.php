@@ -109,7 +109,12 @@ class frontend extends \core_availability\frontend {
     protected function get_course_roles($context) {
         global $DB, $CFG;
 
-        $contextroleids = get_roles_for_contextlevels(CONTEXT_COURSE);
+        // Get and implode the roles which have been enabled in the settings.
+        $contextroleids = [];
+        $enabledroles = get_config('availability_role', 'setting_supportedroles');
+        if (!empty($enabledroles)) {
+            $contextroleids = explode(',', $enabledroles);
+        }
 
         // Add guest role, if desired and guest role exists and is not yet included.
         $guestroleid = get_guest_role()->id;
