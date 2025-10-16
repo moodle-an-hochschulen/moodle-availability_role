@@ -25,7 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-
     // Settings title to group preset related settings together with a common heading. We don't want a description here.
     $name = 'availability_role/setting_supportedrolesheading';
     $title = get_string('setting_supportedrolesheading', 'availability_role', null, true);
@@ -55,7 +54,7 @@ if ($ADMIN->fulltree) {
     // Setting for supported roles.
     $name = 'availability_role/setting_supportedroles';
     $title = get_string('setting_supportedroles', 'availability_role', null, true);
-    $description = get_string('setting_supportedroles_desc', 'availability_role', null, true).'<br />'.
+    $description = get_string('setting_supportedroles_desc', 'availability_role', null, true) . '<br />' .
             get_string('setting_supportedroles_note', 'availability_role', null, true);
     $setting = new admin_setting_configmulticheckbox($name, $title, $description, $roleoptions, $roleoptions);
     $settings->add($setting);
@@ -74,4 +73,3 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $settings->add($setting);
 }
-

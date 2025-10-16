@@ -34,7 +34,6 @@ namespace availability_role;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class frontend extends \core_availability\frontend {
-
     /**
      * Get the initial parameters needed for JavaScript.
      *
@@ -83,19 +82,21 @@ class frontend extends \core_availability\frontend {
 
         // Add guest role, if desired and guest role exists and is not yet included.
         $guestroleid = get_guest_role()->id;
-        if (get_config('availability_role', 'setting_supportguestrole') &&
+        if (
+            get_config('availability_role', 'setting_supportguestrole') &&
                 !empty($guestroleid) &&
-                !in_array($guestroleid, $contextroleids)) {
-
+                !in_array($guestroleid, $contextroleids)
+        ) {
             $contextroleids[] = $guestroleid;
         }
 
         // Add role for users that are not logged in, if desired and this role exists and is not yet included.
         $notloggedinroleid = $CFG->notloggedinroleid;
-        if (get_config('availability_role', 'setting_supportnotloggedinrole') &&
+        if (
+            get_config('availability_role', 'setting_supportnotloggedinrole') &&
                 !empty($notloggedinroleid) &&
-                !in_array($notloggedinroleid, $contextroleids)) {
-
+                !in_array($notloggedinroleid, $contextroleids)
+        ) {
             $contextroleids[] = $notloggedinroleid;
         }
 

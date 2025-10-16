@@ -93,8 +93,10 @@ class condition extends \core_availability\condition {
             }
             // Otherwise it's a warning.
             $this->roleid = -1;
-            $logger->process('Restored item ('.$name.') has availability condition on a role that was not restored',
-                    \backup::LOG_WARNING);
+            $logger->process(
+                'Restored item (' . $name . ') has availability condition on a role that was not restored',
+                \backup::LOG_WARNING
+            );
         } else {
             $this->roleid = (int)$rec->newitemid;
         }
