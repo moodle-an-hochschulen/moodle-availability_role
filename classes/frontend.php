@@ -44,17 +44,39 @@ class frontend extends \core_availability\frontend {
      * @return array
      */
     protected function get_javascript_init_params($course, ?\cm_info $cm = null, ?\section_info $section = null) {
-        // Change to JS array format and return.
+        // Init the JS array to be returned.
         $jsarray = [];
-        $context = \context_course::instance($course->id);
 
         // Get all roles for course.
-        $roles = $this->get_course_roles($context);
-
-        foreach ($roles as $rec) {
+        $coursecontext = \context_course::instance($course->id);
+        foreach ($this->get_course_roles() as $rec) {
             $jsarray[] = (object)[
                 'id' => $rec->id,
-                'name' => $rec->localname,
+                'name' => role_get_name($rec, $coursecontext),
+                'type' => get_string('course'),
+                'typeid' => \availability_role\condition::ROLETYPE_COURSE,
+            ];
+        }
+
+        // Get all roles for course category.
+        $catcontext = \context_coursecat::instance($course->category);
+        foreach ($this->get_coursecat_roles() as $rec) {
+            $jsarray[] = (object)[
+                'id' => $rec->id,
+                'name' => role_get_name($rec, $catcontext),
+                'type' => get_string('coursecategory'),
+                'typeid' => \availability_role\condition::ROLETYPE_COURSECAT,
+            ];
+        }
+
+        // Get all global roles.
+        $systemcontext = \context_system::instance();
+        foreach ($this->get_global_roles() as $rec) {
+            $jsarray[] = (object)[
+                'id' => $rec->id,
+                'name' => role_get_name($rec, $systemcontext),
+                'type' => get_string('coresystem'),
+                'typeid' => \availability_role\condition::ROLETYPE_GLOBAL,
             ];
         }
 
@@ -62,22 +84,20 @@ class frontend extends \core_availability\frontend {
     }
 
     /**
-     * Get the course roles for a specific context.
-     *
-     * @param \context          $context
+     * Get the configured course roles, including the guest role if enabled.
      *
      * @return array
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    protected function get_course_roles($context) {
-        global $DB, $CFG;
+    protected function get_course_roles() {
+        global $DB;
 
-        // Get and implode the roles which have been enabled in the settings.
-        $contextroleids = [];
+        // Get the roles which have been enabled in the settings.
+        $roleids = [];
         $enabledroles = get_config('availability_role', 'setting_supportedroles');
         if (!empty($enabledroles)) {
-            $contextroleids = explode(',', $enabledroles);
+            $roleids = explode(',', $enabledroles);
         }
 
         // Add guest role, if desired and guest role exists and is not yet included.
@@ -85,9 +105,47 @@ class frontend extends \core_availability\frontend {
         if (
             get_config('availability_role', 'setting_supportguestrole') &&
                 !empty($guestroleid) &&
-                !in_array($guestroleid, $contextroleids)
+                !in_array($guestroleid, $roleids)
         ) {
-            $contextroleids[] = $guestroleid;
+            $roleids[] = $guestroleid;
+        }
+
+        return $DB->get_records_list('role', 'id', $roleids, 'sortorder');
+    }
+
+    /**
+     * Get the configured course category roles.
+     *
+     * @return array
+     * @throws \dml_exception
+     */
+    protected function get_coursecat_roles() {
+        global $DB;
+
+        // Get the roles which have been enabled in the settings.
+        $roleids = [];
+        $enabledroles = get_config('availability_role', 'coursecatroles');
+        if (!empty($enabledroles)) {
+            $roleids = explode(',', $enabledroles);
+        }
+
+        return $DB->get_records_list('role', 'id', $roleids, 'sortorder');
+    }
+
+    /**
+     * Get the configured global roles, including the not-logged-in role if enabled.
+     *
+     * @return array
+     * @throws \dml_exception
+     */
+    protected function get_global_roles() {
+        global $DB, $CFG;
+
+        // Get the roles which have been enabled in the settings.
+        $roleids = [];
+        $enabledroles = get_config('availability_role', 'globalroles');
+        if (!empty($enabledroles)) {
+            $roleids = explode(',', $enabledroles);
         }
 
         // Add role for users that are not logged in, if desired and this role exists and is not yet included.
@@ -95,18 +153,12 @@ class frontend extends \core_availability\frontend {
         if (
             get_config('availability_role', 'setting_supportnotloggedinrole') &&
                 !empty($notloggedinroleid) &&
-                !in_array($notloggedinroleid, $contextroleids)
+                !in_array($notloggedinroleid, $roleids)
         ) {
-            $contextroleids[] = $notloggedinroleid;
+            $roleids[] = $notloggedinroleid;
         }
 
-        $contextroles = $DB->get_records_list('role', 'id', $contextroleids, 'sortorder');
-
-        foreach ($contextroles as $id => $role) {
-            $role->localname = role_get_name($role, $context);
-        }
-
-        return $contextroles;
+        return $DB->get_records_list('role', 'id', $roleids, 'sortorder');
     }
 
     /**
@@ -120,6 +172,16 @@ class frontend extends \core_availability\frontend {
      * @return bool
      */
     protected function allow_add($course, ?\cm_info $cm = null, ?\section_info $section = null) {
+        if ($cm) {
+            $context = $cm->context;
+        } else {
+            $context = \context_course::instance($course->id);
+        }
+
+        if (!has_capability('availability/role:addinstance', $context)) {
+            return false;
+        }
+
         return true;
     }
 }

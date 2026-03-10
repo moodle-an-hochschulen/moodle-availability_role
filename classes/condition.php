@@ -34,8 +34,17 @@ namespace availability_role;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class condition extends \core_availability\condition {
-    /** @var int ID of role that this condition requires */
+    /** @var int ID of role that this condition requires. */
     protected $roleid = 0;
+    /** @var int ID of type that this condition requires. */
+    protected $typeid = 0;
+
+    /** @var int Role type for course context. */
+    public const ROLETYPE_COURSE = 0;
+    /** @var int Role type for course category context. */
+    public const ROLETYPE_COURSECAT = 1;
+    /** @var int Role type for system context. */
+    public const ROLETYPE_GLOBAL = 2;
 
     /**
      * Constructor.
@@ -50,6 +59,16 @@ class condition extends \core_availability\condition {
         } else {
             throw new \coding_exception('Invalid ->id for role condition');
         }
+
+        // Get type id.
+        if (isset($structure->typeid) && is_int($structure->typeid)) {
+            $this->typeid = $structure->typeid;
+        } else {
+            // Do not throw an exception if typeid is missing, as it was not required in
+            // previous versions and we want to be able to handle old conditions without typeid as well.
+            // Just assume it's course role in this case.
+            $this->typeid = self::ROLETYPE_COURSE;
+        }
     }
 
     /**
@@ -61,6 +80,7 @@ class condition extends \core_availability\condition {
         $result = (object)['type' => 'role'];
         if ($this->roleid) {
             $result->id = $this->roleid;
+            $result->typeid = $this->typeid;
         } else {
             $result->activity = true;
         }
@@ -92,9 +112,16 @@ class condition extends \core_availability\condition {
                 return false;
             }
             // Otherwise it's a warning.
+            $roletypenames = [
+                self::ROLETYPE_COURSE    => 'course',
+                self::ROLETYPE_COURSECAT => 'category',
+                self::ROLETYPE_GLOBAL    => 'global',
+            ];
+            $roletypename = $roletypenames[$this->typeid] ?? 'unknown';
             $this->roleid = -1;
             $logger->process(
-                'Restored item (' . $name . ') has availability condition on a role that was not restored',
+                'Restored item (' . $name . ') has availability condition on a ' . $roletypename .
+                    ' role that was not restored',
                 \backup::LOG_WARNING
             );
         } else {
@@ -117,40 +144,67 @@ class condition extends \core_availability\condition {
      */
     public function is_available($not, \core_availability\info $info, $grabthelot, $userid) {
         global $USER, $CFG;
-        $context = \context_course::instance($info->get_course()->id);
         $allow = false;
 
-        // Is the user's course role switched?
-        if (!empty($USER->access['rsw'][$context->path])) {
-            // Check only switched role.
-            if ($USER->access['rsw'][$context->path] == $this->roleid) {
+        // Check the user's role based on the type of role this condition is using.
+        switch ($this->typeid) {
+            case self::ROLETYPE_GLOBAL:
+                $context = \context_system::instance();
+                // Check all of the user's global roles.
+                foreach (get_user_roles($context, $userid) as $role) {
+                    if ($role->roleid == $this->roleid) {
+                        $allow = true;
+                        break;
+                    }
+                }
+                break;
+            case self::ROLETYPE_COURSECAT:
+                $context = \context_coursecat::instance($info->get_course()->category);
+                // Check all of the user's course category roles.
+                foreach (get_user_roles($context, $userid) as $role) {
+                    if ($role->roleid == $this->roleid) {
+                        $allow = true;
+                        break;
+                    }
+                }
+                break;
+            case self::ROLETYPE_COURSE:
+            default:
+                $context = \context_course::instance($info->get_course()->id);
+                // Is the user's course role switched?
+                if (!empty($USER->access['rsw'][$context->path])) {
+                    // Check only switched role.
+                    if ($USER->access['rsw'][$context->path] == $this->roleid) {
+                        $allow = true;
+                    }
+                    // Or is the user currently having his own role(s)?
+                } else {
+                    // Check all of the user's course roles.
+                    foreach (get_user_roles($context, $userid) as $role) {
+                        if ($role->roleid == $this->roleid) {
+                            $allow = true;
+                            break;
+                        }
+                    }
+                }
+                break;
+        }
+
+        // As get_user_roles only returns roles for enrolled users, we have to check whether a user
+        // is viewing the course as guest or is not logged in separately.
+
+        // Is the user not logged in?
+        if (empty($userid) || isguestuser($userid)) {
+            if ($CFG->notloggedinroleid == $this->roleid) {
                 $allow = true;
             }
-            // Or is the user currently having his own role(s)?
-        } else {
-            // Check all of the user's course roles.
-            foreach (get_user_roles($context, $userid) as $role) {
-                if ($role->roleid == $this->roleid) {
-                    $allow = true;
-                    break;
-                }
-            }
+        }
 
-            // As get_user_roles only returns roles for enrolled users, we have to check whether a user
-            // is viewing the course as guest or is not logged in separately.
-
-            // Is the user not logged in?
-            if (empty($userid) || isguestuser($userid)) {
-                if ($CFG->notloggedinroleid == $this->roleid) {
-                    $allow = true;
-                }
-            }
-
-            // Is the user viewing the course as guest?
-            if (is_guest($context, $userid)) {
-                if (get_guest_role()->id == $this->roleid) {
-                    $allow = true;
-                }
+        // Is the user viewing the course as guest?
+        $context = \context_course::instance($info->get_course()->id);
+        if (is_guest($context, $userid)) {
+            if (get_guest_role()->id == $this->roleid) {
+                $allow = true;
             }
         }
 
