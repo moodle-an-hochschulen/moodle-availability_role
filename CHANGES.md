@@ -4,6 +4,11 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-03-10 - Improvement: Add a capability to control who is allowed to add the condition, credits go to ByCS-LP
+* 2026-03-10 - Feature: Extend availability condition to support course category roles and global roles, credits go to Robert Schrenk and ByCS-LP
+
 ### v5.0-r3
 
 * 2025-10-15 - Make codechecker happy again
