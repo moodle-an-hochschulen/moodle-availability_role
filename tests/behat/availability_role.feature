@@ -287,3 +287,65 @@ Feature: availability_role
     And I am on "Course 1" course homepage
     Then I should see "P1" in the "region-main" "region"
     And I should not see "Not available unless" in the "region-main" "region"
+
+  Scenario: Nonsensical warning is shown when a role without module view capability is selected and persists after re-editing
+    # Course Tester is a custom role with no capabilities at all, so restricting a page activity
+    # to it is nonsensical: users with only that role can never view the activity.
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a page to section "1" using the activity chooser
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    # Before choosing a specific role, the warning div must not exist in the DOM at all.
+    Then ".availability_role_nonsensical_warning" "css_element" should not exist
+    # Select a role that has no mod/page:view capability – the warning must appear.
+    When I set the field "Role" to "Course Tester"
+    Then ".availability_role_nonsensical_warning" "css_element" should exist
+    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
+    # Save the activity with this nonsensical restriction.
+    And I set the following fields to these values:
+      | Name         | P1 |
+      | Description  | x  |
+      | Page content | x  |
+    And I click on "Save and return to course" "button"
+    # Re-open the activity settings and verify the warning is still shown because the
+    # nonsensical role is pre-selected from the saved condition.
+    When I open "P1" actions menu
+    And I click on "Edit settings" "link" in the "P1" activity
+    And I expand all fieldsets
+    Then ".availability_role_nonsensical_warning" "css_element" should exist
+    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
+
+  Scenario: Nonsensical warning is shown when a role has an explicit CAP_PROHIBIT override for the module view capability
+    # The Non-editing teacher role normally has mod/page:view access, but after an explicit
+    # Prohibit override in this course it can no longer view pages – the warning must appear.
+    Given the following "permission overrides" exist:
+      | capability    | permission | role    | contextlevel | reference |
+      | mod/page:view | Prohibit   | teacher | Course       | C1        |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a page to section "1" using the activity chooser
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    # Before choosing a specific role, the warning div must not exist in the DOM at all.
+    Then ".availability_role_nonsensical_warning" "css_element" should not exist
+    # Select the Non-editing teacher role – the explicit Prohibit override means non-editing
+    # teachers can never view this activity, so the warning must appear.
+    When I set the field "Role" to "Non-editing teacher"
+    Then ".availability_role_nonsensical_warning" "css_element" should exist
+    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
+    # Save the activity with this nonsensical restriction.
+    And I set the following fields to these values:
+      | Name         | P1 |
+      | Description  | x  |
+      | Page content | x  |
+    And I click on "Save and return to course" "button"
+    # Re-open the activity settings and verify the warning is still shown because the
+    # nonsensical role is pre-selected from the saved condition.
+    When I open "P1" actions menu
+    And I click on "Edit settings" "link" in the "P1" activity
+    And I expand all fieldsets
+    Then ".availability_role_nonsensical_warning" "css_element" should exist
+    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"

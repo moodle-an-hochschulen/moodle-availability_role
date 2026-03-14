@@ -80,6 +80,70 @@ class frontend extends \core_availability\frontend {
             ];
         }
 
+        // If restricting an activity module, mark roles that cannot view this module type as nonsensical.
+        // A restriction is nonsensical if the role has no CAP_ALLOW for mod/{modname}:view anywhere in the
+        // context chain, meaning users with only that role can never access the activity regardless.
+        // When editing an existing activity, $cm carries the module name. When adding a new activity,
+        // $cm is null but the module name is available via the 'add' request parameter (modedit.php?add=forum).
+        $modname = null;
+        if ($cm !== null) {
+            $modname = $cm->modname;
+        } else {
+            $addparam = optional_param('add', '', PARAM_ALPHANUM);
+            if (!empty($addparam)) {
+                $modname = $addparam;
+            }
+        }
+
+        // If we have a module name.
+        if ($modname !== null) {
+            // Build the capability name and check it exists.
+            // If the module has no view capability, we skip the nonsensical restriction.
+            $modviewcap = 'mod/' . $modname . ':view';
+            if (get_capability_info($modviewcap) !== null) {
+                // A role restriction is nonsensical when the role can never view this activity type.
+                //
+                // Strategy:
+                // 1. Check the 'user' archetype (= authenticated user, the implicit base for every
+                // logged-in course member). If it has CAP_ALLOW for the view capability, then all
+                // standard enrolled-user roles inherit that access by default – unless explicitly
+                // overridden at course/category level.
+                // 2. Layer explicit role_capabilities overrides (CAP_ALLOW / CAP_PROHIBIT) from the
+                // context chain on top to catch local permission changes.
+                // 3. Custom roles (no archetype) are not backed by the authenticated-user default,
+                // so they are nonsensical unless they carry an explicit CAP_ALLOW.
+
+                // Step 1: Get the default capabilities for the 'user' archetype and check
+                // if it has CAP_ALLOW for the module view capability.
+                $authuserdefaults = get_default_capabilities('user');
+                $authuserhasview = isset($authuserdefaults[$modviewcap]) && $authuserdefaults[$modviewcap] == CAP_ALLOW;
+
+                // Step 2: Get explicit CAP_ALLOW / CAP_PROHIBIT for the view capability in the course context
+                // and cache them in arrays of roleid => capvalue.
+                [$explicitallowed, $explicitprohibited] = get_roles_with_cap_in_context($coursecontext, $modviewcap);
+
+                // Step 3: Loop through the roles and mark them as nonsensical if they have no access to the activity.
+                foreach ($jsarray as $role) {
+                    if (isset($explicitprohibited[$role->id])) {
+                        // Explicit CAP_PROHIBIT somewhere in the context chain → no access.
+                        $role->nonsensical = true;
+                    } else if (isset($explicitallowed[$role->id])) {
+                        // Explicit CAP_ALLOW override → access guaranteed.
+                        $role->nonsensical = false;
+                    } else if ($authuserhasview && !empty($role->archetype)) {
+                        // Authenticated users have the capability by default and this is a named
+                        // archetype role → inherits that default access → not nonsensical.
+                        $role->nonsensical = false;
+                    } else {
+                        // Custom role (no archetype) without an explicit CAP_ALLOW, or a named
+                        // archetype role where the authenticated user base does not have the
+                        // capability → nonsensical.
+                        $role->nonsensical = true;
+                    }
+                }
+            }
+        }
+
         return [$jsarray];
     }
 
@@ -183,5 +247,13 @@ class frontend extends \core_availability\frontend {
         }
 
         return true;
+    }
+
+    /**
+     * Get javascript strings.
+     * @return array
+     */
+    protected function get_javascript_strings() {
+        return ['error_selectrole', 'nonsensical_warning'];
     }
 }
