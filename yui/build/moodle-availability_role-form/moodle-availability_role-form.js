@@ -24,6 +24,62 @@ M.availability_role.form.initInner = function(roles) {
 };
 
 /**
+ * Updates the nonsensical warning visibility for a given form node.
+ * A warning is shown when the selected role has been flagged as nonsensical
+ * (i.e. the role cannot view this activity type).
+ *
+ * @method updateNonsensicalWarning
+ * @param {Y.Node} node The availability condition form node
+ */
+M.availability_role.form.updateNonsensicalWarning = function(node) {
+    // Get the existing warning node if it exists.
+    var warning = node.one('.availability_role_nonsensical_warning');
+
+    // Get the currently selected value from the select element.
+    var selected = node.one('select[name=id]').get('value');
+
+    // If no role has been chosen, remove any existing warning and return.
+    if (selected === 'choose') {
+        if (warning) {
+            warning.remove(true);
+        }
+        return;
+    }
+
+    // Split the selected value to extract the typeid and roleid.
+    var parts = selected.split('_');
+    var typeid = parseInt(parts[0], 10);
+    var roleid = parseInt(parts[1], 10);
+
+    // Determine whether the selected role is flagged as nonsensical.
+    // Use loose equality (==) to safely handle string/integer differences from PHP JSON serialisation.
+    var nonsensical = false;
+    Y.each(M.availability_role.form.roles, function(role) {
+        if (role.id == roleid && role.typeid == typeid && role.nonsensical) {
+            nonsensical = true;
+        }
+    });
+
+    // If the selected role is nonsensical, ensure the warning is shown. Otherwise, ensure it is removed.
+    if (nonsensical) {
+        // Create and append the warning div if it does not already exist.
+        if (!warning) {
+            warning = Y.Node.create(
+                '<div class="availability_role_nonsensical_warning alert alert-warning my-2">' +
+                M.util.get_string('nonsensical_warning', 'availability_role') +
+                '</div>'
+            );
+            node.append(warning);
+        }
+    } else {
+        // Remove the warning from the DOM if it is currently present.
+        if (warning) {
+            warning.remove(true);
+        }
+    }
+};
+
+/**
  * Creates and returns the form node for this condition, based on the provided JSON data.
  *
  * @method getNode
@@ -66,15 +122,17 @@ M.availability_role.form.getNode = function(json) {
     html += '</select></span></label>';
 
     // Create a node from the HTML.
-    var node = Y.Node.create('<span>' + html + '</span>');
+    var node = Y.Node.create('<span class="availability_role_form">' + html + '</span>');
 
     // Fall back to typeid 0 (course role) for old conditions that were saved without a typeid.
     var typeid = (json.typeid !== undefined) ? json.typeid : 0;
 
-    // Set initial value if specified.
+    // In edit mode (json.id is set), pre-select the saved role and update the warning accordingly.
+    // For new conditions the select stays at 'choose' and no warning div should appear.
     if (json.id !== undefined &&
             node.one('select[name=id] option[value=' + typeid + '_' + json.id + ']')) {
         node.one('select[name=id]').set('value', typeid + '_' + json.id);
+        M.availability_role.form.updateNonsensicalWarning(node);
     }
 
     // Add event handlers (first time only).
@@ -82,8 +140,14 @@ M.availability_role.form.getNode = function(json) {
         M.availability_role.form.addedEvents = true;
         var root = Y.one('.availability-field');
         root.delegate('change', function() {
-            // Just update the form fields.
+            // Update the form fields.
             M.core_availability.form.update();
+
+            // Update warning for the changed node.
+            // Use the .availability_role_form class to find the correct outer span,
+            // as .ancestor('span') would stop at the nested availability-group span.
+            var changedNode = Y.one(this).ancestor('.availability_role_form');
+            M.availability_role.form.updateNonsensicalWarning(changedNode);
         }, '.availability_role select');
     }
 
