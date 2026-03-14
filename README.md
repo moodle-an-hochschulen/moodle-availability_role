@@ -15,7 +15,7 @@ This plugin requires Moodle 5.1+
 Motivation for this plugin
 --------------------------
 
-If your teachers want to restrict activities / resources / sections in their course to a subset of the course participants and these course participants share a common course role, this plugin is for you.
+If your teachers want to restrict activities / resources / sections in their course to a subset of the course participants and these course participants share a common course role, a course category role or global role, this plugin is for you.
 
 Have a look at an example:
 
@@ -45,11 +45,29 @@ Teachers (and other users with editing rights) can add the "Role" availability c
 
 If you want to learn more about using availability plugins in Moodle, please see https://docs.moodle.org/en/Restrict_access.
 
+To further configure the plugin and its behaviour, please visit:
+Site administration -> Availability restrictions -> Restriction by role
+
+There, you find two setting sections:
+
+### 1. Supported roles
+
+With these settings, you can limit the roles that can be used in the condition. By default, all roles that can be assigned in the course context can be used in the condition, but roles which can be assigned on the category or global level are not enabled by default.
+
+### 2. Special roles
+
+If activated, the availability of activities can be restricted to or forbidden for users that are viewing a course as guest as well as for users that are not logged in.
+
 
 Capabilities
 ------------
 
-This plugin does not add any additional capabilities.
+This plugin also introduces these additional capabilities:
+
+### availability/role:addinstance
+
+This capability controls who is allowed to add the availability condition in a course.
+By default, this capability is assigned to managers, course creators and editing teachers.
 
 
 Scheduled Tasks

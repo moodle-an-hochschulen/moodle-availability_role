@@ -25,49 +25,78 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-    // Settings title to group preset related settings together with a common heading. We don't want a description here.
-    $name = 'availability_role/setting_supportedrolesheading';
+    // Supported roles heading.
+    $name = 'availability_role/supportedrolesheading';
     $title = get_string('setting_supportedrolesheading', 'availability_role', null, true);
-    $setting = new admin_setting_heading($name, $title, null);
+    $description = get_string('setting_supportedrolesheading_desc', 'availability_role', null, true) . '<br />' .
+            get_string('setting_supportedrolesheading_note', 'availability_role', null, true);
+    $setting = new admin_setting_heading($name, $title, $description);
     $settings->add($setting);
 
-    // Create role chooser options.
-    $roleoptions = [];
-    $roles = get_all_roles();
+    // Create role chooser options for course, course category, and global levels.
+    $allroles = get_all_roles();
     $systemcontext = context_system::instance();
-    $rolenames = role_fix_names($roles, $systemcontext, ROLENAME_ORIGINAL);
-    if (!empty($rolenames)) {
-        foreach ($rolenames as $key => $role) {
-            // If the role cannot be assigned in the course context, skip it.
+    $allrolenames = role_fix_names($allroles, $systemcontext, ROLENAME_ORIGINAL);
+
+    $courseroleoptions = [];
+    $categoryroleoptions = [];
+    $globalroleoptions = [];
+
+    if (!empty($allrolenames)) {
+        foreach ($allrolenames as $role) {
             $rolecontextlevels = get_role_contextlevels($role->id);
-            if (!in_array(CONTEXT_COURSE, $rolecontextlevels)) {
-                continue;
+            $rolename = $role->localname;
+
+            // Add to course roles if assignable at course level.
+            if (in_array(CONTEXT_COURSE, $rolecontextlevels)) {
+                $courseroleoptions[$role->id] = $rolename;
             }
 
-            // If the role is not already in the list, add it.
-            if (!array_key_exists($role->id, $roleoptions)) {
-                $roleoptions[$role->id] = $role->localname;
+            // Add to course category roles if assignable at course category level.
+            if (in_array(CONTEXT_COURSECAT, $rolecontextlevels)) {
+                $categoryroleoptions[$role->id] = $rolename;
+            }
+
+            // Add to global roles if assignable at system level.
+            if (in_array(CONTEXT_SYSTEM, $rolecontextlevels)) {
+                $globalroleoptions[$role->id] = $rolename;
             }
         }
     }
 
-    // Setting for supported roles.
-    $name = 'availability_role/setting_supportedroles';
-    $title = get_string('setting_supportedroles', 'availability_role', null, true);
-    $description = get_string('setting_supportedroles_desc', 'availability_role', null, true) . '<br />' .
-            get_string('setting_supportedroles_note', 'availability_role', null, true);
-    $setting = new admin_setting_configmulticheckbox($name, $title, $description, $roleoptions, $roleoptions);
+    // Setting for supported course roles.
+    $name = 'availability_role/courseroles';
+    $title = get_string('setting_courseroles', 'availability_role', null, true);
+    $setting = new admin_setting_configmulticheckbox($name, $title, null, $courseroleoptions, $courseroleoptions);
+    $settings->add($setting);
+
+    // Setting for supported course category roles.
+    $name = 'availability_role/coursecatroles';
+    $title = get_string('setting_coursecatroles', 'availability_role', null, true);
+    $setting = new admin_setting_configmulticheckbox($name, $title, null, [], $categoryroleoptions);
+    $settings->add($setting);
+
+    // Setting for supported global roles.
+    $name = 'availability_role/globalroles';
+    $title = get_string('setting_globalroles', 'availability_role', null, true);
+    $setting = new admin_setting_configmulticheckbox($name, $title, null, [], $globalroleoptions);
+    $settings->add($setting);
+
+    // Special roles heading.
+    $name = 'availability_role/specialrolesheading';
+    $title = get_string('setting_specialrolesheading', 'availability_role', null, true);
+    $setting = new admin_setting_heading($name, $title, null);
     $settings->add($setting);
 
     // Setting for guest role.
-    $name = 'availability_role/setting_supportguestrole';
+    $name = 'availability_role/supportguestrole';
     $title = get_string('setting_supportguestrole', 'availability_role', null, true);
     $description = get_string('setting_supportguestrole_desc', 'availability_role', null, true);
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $settings->add($setting);
 
     // Setting for not-logged-in role.
-    $name = 'availability_role/setting_supportnotloggedinrole';
+    $name = 'availability_role/supportnotloggedinrole';
     $title = get_string('setting_supportnotloggedinrole', 'availability_role', null, true);
     $description = get_string('setting_supportnotloggedinrole_desc', 'availability_role', null, true);
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
