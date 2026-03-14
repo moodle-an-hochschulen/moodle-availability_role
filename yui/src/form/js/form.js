@@ -32,7 +32,7 @@ M.availability_role.form.getNode = function(json) {
     // Start to create the HTML structure.
     var html = '<label><span class="pe-3">' + M.util.get_string('title', 'availability_role') + '</span> ' +
             '<span class="availability-group">' +
-            '<select name="id" class="custom-select">' +
+            '<select name="id" class="form-select">' +
             '<option value="choose">' + M.util.get_string('choosedots', 'moodle') + '</option>';
 
     // Initialize variable to track when we need to create a new optgroup for a different role type.
