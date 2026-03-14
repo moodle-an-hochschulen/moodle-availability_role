@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['description'] = 'Allow only users with a specified role.';
 $string['error_selectrole'] = 'You must select a role';
 $string['missing'] = '[Missing role]';
+$string['nonsensical_warning'] = '<b>Warning:</b><br />This role does not have view access to this activity type at all.<br />The restriction may have no effect.';
 $string['pluginname'] = 'Restriction by role';
 $string['privacy:metadata'] = 'The Restriction by role plugin does not store any personal data.';
 $string['requires_notrole'] = 'You are not a(n) <em>{$a}</em>';

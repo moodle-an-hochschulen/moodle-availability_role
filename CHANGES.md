@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2026-03-14 - Improvement: Mark nonsensically role restrictions in the edit restrictions form, resolves #17
 * 2026-03-10 - Improvement: Align the plugin's setting names, re-writing existing settings with an upgrade step.
 * 2026-03-10 - Improvement: Add a capability to control who is allowed to add the condition, credits go to ByCS-LP
 * 2026-03-10 - Feature: Extend availability condition to support course category roles and global roles, credits go to Robert Schrenk and ByCS-LP
