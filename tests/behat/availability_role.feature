@@ -44,7 +44,7 @@ Feature: availability_role
     And I log in as "admin"
     # Enable all three roles to be used in the availability condition.
     And I navigate to "Plugins > Availability restrictions > Restriction by role" in site administration
-    And I click on "Course Tester" "checkbox" in the "#admin-setting_supportedroles" "css_element"
+    And I click on "Course Tester" "checkbox" in the "#admin-courseroles" "css_element"
     And I click on "Cat Tester" "checkbox" in the "#admin-coursecatroles" "css_element"
     And I click on "Global Tester" "checkbox" in the "#admin-globalroles" "css_element"
     And I press "Save changes"
@@ -152,8 +152,8 @@ Feature: availability_role
 
   Scenario: Add role condition for the guest role to a page activity and try to view it with a fully enrolled and a guest-enrolled student
     Given the following config values are set as admin:
-      | config                   | value | plugin            |
-      | setting_supportguestrole | YES   | availability_role |
+      | config           | value | plugin            |
+      | supportguestrole | YES   | availability_role |
     And I log in as "teacher1"
     And I am on the "Course 1" "enrolment methods" page
     And I click on "Edit" "link" in the "Guest access" "table_row"
@@ -187,8 +187,8 @@ Feature: availability_role
       | name    | shortname | description | archetype |
       | Visitor | visitor   | Visitor     | guest     |
     And the following config values are set as admin:
-      | config                         | value | plugin            |
-      | setting_supportnotloggedinrole | YES   | availability_role |
+      | config                 | value | plugin            |
+      | supportnotloggedinrole | YES   | availability_role |
     And the following config values are set as admin:
       | config                         | value |
       | guestloginbutton               | 1     |
@@ -236,8 +236,8 @@ Feature: availability_role
     And I should see "Manager" in the ".availability_role select" "css_element"
     And I should see "Non-editing teacher" in the ".availability_role select" "css_element"
     And I navigate to "Plugins > Availability restrictions > Restriction by role" in site administration
-    And I click on "Manager" "checkbox" in the "#admin-setting_supportedroles" "css_element"
-    And I click on "Non-editing teacher" "checkbox" in the "#admin-setting_supportedroles" "css_element"
+    And I click on "Manager" "checkbox" in the "#admin-courseroles" "css_element"
+    And I click on "Non-editing teacher" "checkbox" in the "#admin-courseroles" "css_element"
     And I press "Save changes"
     And I am on "Course 1" course homepage with editing mode on
     And I add a page to section "1" using the activity chooser
