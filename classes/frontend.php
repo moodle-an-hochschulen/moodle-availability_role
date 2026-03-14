@@ -95,7 +95,7 @@ class frontend extends \core_availability\frontend {
 
         // Get the roles which have been enabled in the settings.
         $roleids = [];
-        $enabledroles = get_config('availability_role', 'setting_supportedroles');
+        $enabledroles = get_config('availability_role', 'courseroles');
         if (!empty($enabledroles)) {
             $roleids = explode(',', $enabledroles);
         }
@@ -103,7 +103,7 @@ class frontend extends \core_availability\frontend {
         // Add guest role, if desired and guest role exists and is not yet included.
         $guestroleid = get_guest_role()->id;
         if (
-            get_config('availability_role', 'setting_supportguestrole') &&
+            get_config('availability_role', 'supportguestrole') &&
                 !empty($guestroleid) &&
                 !in_array($guestroleid, $roleids)
         ) {
@@ -151,7 +151,7 @@ class frontend extends \core_availability\frontend {
         // Add role for users that are not logged in, if desired and this role exists and is not yet included.
         $notloggedinroleid = $CFG->notloggedinroleid;
         if (
-            get_config('availability_role', 'setting_supportnotloggedinrole') &&
+            get_config('availability_role', 'supportnotloggedinrole') &&
                 !empty($notloggedinroleid) &&
                 !in_array($notloggedinroleid, $roleids)
         ) {

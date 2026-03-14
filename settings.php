@@ -65,7 +65,7 @@ if ($ADMIN->fulltree) {
     }
 
     // Setting for supported course roles.
-    $name = 'availability_role/setting_supportedroles';
+    $name = 'availability_role/courseroles';
     $title = get_string('setting_courseroles', 'availability_role', null, true);
     $setting = new admin_setting_configmulticheckbox($name, $title, null, $courseroleoptions, $courseroleoptions);
     $settings->add($setting);
@@ -89,14 +89,14 @@ if ($ADMIN->fulltree) {
     $settings->add($setting);
 
     // Setting for guest role.
-    $name = 'availability_role/setting_supportguestrole';
+    $name = 'availability_role/supportguestrole';
     $title = get_string('setting_supportguestrole', 'availability_role', null, true);
     $description = get_string('setting_supportguestrole_desc', 'availability_role', null, true);
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $settings->add($setting);
 
     // Setting for not-logged-in role.
-    $name = 'availability_role/setting_supportnotloggedinrole';
+    $name = 'availability_role/supportnotloggedinrole';
     $title = get_string('setting_supportnotloggedinrole', 'availability_role', null, true);
     $description = get_string('setting_supportnotloggedinrole_desc', 'availability_role', null, true);
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
