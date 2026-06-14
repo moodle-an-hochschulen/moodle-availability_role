@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v5.1-r2
 
 * 2026-03-14 - Improvement: Mark nonsensically role restrictions in the edit restrictions form, resolves #17
 * 2026-03-14 - Bootstrap Update: Replace custom-select class with form-select
