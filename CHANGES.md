@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v4.5-r4
 
 * 2026-03-14 - Improvement: Mark nonsensically role restrictions in the edit restrictions form, resolves #17
 * 2026-03-10 - Improvement: Align the plugin's setting names, re-writing existing settings with an upgrade step.
