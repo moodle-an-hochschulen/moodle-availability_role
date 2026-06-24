@@ -59,14 +59,19 @@ class frontend extends \core_availability\frontend {
         }
 
         // Get all roles for course category.
-        $catcontext = \context_coursecat::instance($course->category);
-        foreach ($this->get_coursecat_roles() as $rec) {
-            $jsarray[] = (object)[
-                'id' => $rec->id,
-                'name' => role_get_name($rec, $catcontext),
-                'type' => get_string('coursecategory'),
-                'typeid' => \availability_role\condition::ROLETYPE_COURSECAT,
-            ];
+        // The site course (front page) is not located in any course category and has $course->category == 0.
+        // In that case there is no course category context, so we skip the course category roles altogether
+        // to avoid instantiating an invalid context (which would throw a dml_missing_record_exception).
+        if (!empty($course->category)) {
+            $catcontext = \context_coursecat::instance($course->category);
+            foreach ($this->get_coursecat_roles() as $rec) {
+                $jsarray[] = (object)[
+                    'id' => $rec->id,
+                    'name' => role_get_name($rec, $catcontext),
+                    'type' => get_string('coursecategory'),
+                    'typeid' => \availability_role\condition::ROLETYPE_COURSECAT,
+                ];
+            }
         }
 
         // Get all global roles.

@@ -144,6 +144,41 @@ final class condition_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that evaluating a course category role condition on the front page (site course) does not throw.
+     *
+     * The site course is not located in any course category and has category == 0, so there is no course
+     * category context. Evaluating the condition must not try to instantiate context_coursecat(0) (which
+     * would throw a dml_missing_record_exception) and must simply report the condition as not available.
+     *
+     * @covers \availability_role\condition::is_available()
+     */
+    public function test_usage_coursecat_role_on_frontpage(): void {
+        global $CFG, $DB;
+        $this->resetAfterTest();
+        $CFG->enableavailability = true;
+
+        // Use the site course (front page), which has category == 0.
+        $sitecourse = $DB->get_record('course', ['id' => SITEID], '*', MUST_EXIST);
+        $this->assertEquals(0, $sitecourse->category);
+
+        // Create a user.
+        $generator = $this->getDataGenerator();
+        $user = $generator->create_user();
+
+        // Get the manager role (assignable at course category context level).
+        $managerrole = $DB->get_record('role', ['shortname' => 'manager'], '*', MUST_EXIST);
+
+        // Create the condition structure and instance for a course category role.
+        $userinfo = new \core_availability\mock_info($sitecourse, $user->id);
+        $structure = (object)['type' => 'role', 'id' => (int) $managerrole->id, 'typeid' => condition::ROLETYPE_COURSECAT];
+        $cond = new condition($structure);
+
+        // On the front page there is no course category, so the condition can never grant access.
+        // The important part is that this does not throw a dml_missing_record_exception.
+        $this->assertFalse($cond->is_available(false, $userinfo, true, $user->id));
+    }
+
+    /**
      * Tests the condition with a global (system) role (ROLETYPE_GLOBAL).
      *
      * @covers \availability_role\condition::is_available()
