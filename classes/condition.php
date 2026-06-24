@@ -159,12 +159,18 @@ class condition extends \core_availability\condition {
                 }
                 break;
             case self::ROLETYPE_COURSECAT:
-                $context = \context_coursecat::instance($info->get_course()->category);
-                // Check all of the user's course category roles.
-                foreach (get_user_roles($context, $userid) as $role) {
-                    if ($role->roleid == $this->roleid) {
-                        $allow = true;
-                        break;
+                // The site course (front page) is not located in any course category and has category == 0.
+                // In that case there is no course category context to check against (and instantiating one would
+                // throw a dml_missing_record_exception), so the user cannot hold a course category role and the
+                // restriction simply does not grant access.
+                if (!empty($info->get_course()->category)) {
+                    $context = \context_coursecat::instance($info->get_course()->category);
+                    // Check all of the user's course category roles.
+                    foreach (get_user_roles($context, $userid) as $role) {
+                        if ($role->roleid == $this->roleid) {
+                            $allow = true;
+                            break;
+                        }
                     }
                 }
                 break;
