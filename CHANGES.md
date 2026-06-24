@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-06-23 - Bugfix: Avoid a dml_missing_record_exception when editing or evaluating activities on the front page, where the course has no course category, resolves #28
+
 ### v4.5-r4
 
 * 2026-03-14 - Improvement: Mark nonsensically role restrictions in the edit restrictions form, resolves #17
