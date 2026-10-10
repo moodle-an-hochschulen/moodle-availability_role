@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-10-05 - Prepare compatibility for Moodle 5.3.
+
 ### v5.2-r2
 
 * 2026-10-11 - Bugfix: Do not show the nonsensical role warning for roles which inherit the module view capability from the authenticated user role, resolves #29
