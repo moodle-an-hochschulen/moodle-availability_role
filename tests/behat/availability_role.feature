@@ -289,33 +289,62 @@ Feature: availability_role
     And I should not see "Not available unless" in the "region-main" "region"
 
   Scenario: Nonsensical warning is shown when a role without module view capability is selected and persists after re-editing
-    # Course Tester is a custom role with no capabilities at all, so restricting a page activity
-    # to it is nonsensical: users with only that role can never view the activity.
+    # Course Tester is a custom role with no capabilities at all. The mod/assign:view capability is not granted to the
+    # authenticated user role either, so users with only the Course Tester role can never view an assignment and
+    # restricting an assignment to it is nonsensical.
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add an Assignment to section "1" using the activity chooser
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    # Before choosing a specific role, the warning div must not exist in the DOM at all.
+    Then ".availability_role_nonsensical_warning" "css_element" should not exist
+    # Select a role that has mod/assign:view – no warning must appear.
+    When I set the field "Role" to "Student"
+    Then ".availability_role_nonsensical_warning" "css_element" should not exist
+    # Select a role that has no mod/assign:view capability – the warning must appear.
+    When I set the field "Role" to "Course Tester"
+    Then ".availability_role_nonsensical_warning" "css_element" should exist
+    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
+    # Save the activity with this nonsensical restriction.
+    And I set the following fields to these values:
+      | Assignment name | A1 |
+    And I click on "Save and return to course" "button"
+    # Re-open the activity settings and verify the warning is still shown because the
+    # nonsensical role is pre-selected from the saved condition.
+    When I open "A1" actions menu
+    And I click on "Edit settings" "link" in the "A1" activity
+    And I expand all fieldsets
+    Then ".availability_role_nonsensical_warning" "css_element" should exist
+    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
+
+  Scenario: Nonsensical warning is not shown when a role inherits the module view capability from the authenticated user role
+    # Course Tester is a custom role with no capabilities at all. However, the mod/page:view capability is granted to the
+    # authenticated user role which every logged-in user holds in addition to the Course Tester role, so users with the
+    # Course Tester role can view a page and restricting a page to it is not nonsensical.
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a page to section "1" using the activity chooser
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
-    # Before choosing a specific role, the warning div must not exist in the DOM at all.
+    # Select a standard role which inherits mod/page:view from the authenticated user role – no warning must appear.
+    When I set the field "Role" to "Student"
     Then ".availability_role_nonsensical_warning" "css_element" should not exist
-    # Select a role that has no mod/page:view capability – the warning must appear.
+    # Select a custom role which inherits mod/page:view from the authenticated user role – no warning must appear.
     When I set the field "Role" to "Course Tester"
-    Then ".availability_role_nonsensical_warning" "css_element" should exist
-    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
-    # Save the activity with this nonsensical restriction.
+    Then ".availability_role_nonsensical_warning" "css_element" should not exist
+    # Save the activity and re-open the activity settings to verify that the warning is still not shown.
     And I set the following fields to these values:
       | Name         | P1 |
       | Description  | x  |
       | Page content | x  |
     And I click on "Save and return to course" "button"
-    # Re-open the activity settings and verify the warning is still shown because the
-    # nonsensical role is pre-selected from the saved condition.
     When I open "P1" actions menu
     And I click on "Edit settings" "link" in the "P1" activity
     And I expand all fieldsets
-    Then ".availability_role_nonsensical_warning" "css_element" should exist
-    And I should see "Warning:" in the ".availability_role_nonsensical_warning" "css_element"
+    Then ".availability_role_nonsensical_warning" "css_element" should not exist
 
   Scenario: Nonsensical warning is shown when a role has an explicit CAP_PROHIBIT override for the module view capability
     # The Non-editing teacher role normally has mod/page:view access, but after an explicit
