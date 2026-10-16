@@ -55,6 +55,7 @@ class frontend extends \core_availability\frontend {
                 'name' => role_get_name($rec, $coursecontext),
                 'type' => get_string('course'),
                 'typeid' => \availability_role\condition::ROLETYPE_COURSE,
+                'archetype' => $rec->archetype,
             ];
         }
 
@@ -70,6 +71,7 @@ class frontend extends \core_availability\frontend {
                     'name' => role_get_name($rec, $catcontext),
                     'type' => get_string('coursecategory'),
                     'typeid' => \availability_role\condition::ROLETYPE_COURSECAT,
+                    'archetype' => $rec->archetype,
                 ];
             }
         }
@@ -82,6 +84,7 @@ class frontend extends \core_availability\frontend {
                 'name' => role_get_name($rec, $systemcontext),
                 'type' => get_string('coresystem'),
                 'typeid' => \availability_role\condition::ROLETYPE_GLOBAL,
+                'archetype' => $rec->archetype,
             ];
         }
 
