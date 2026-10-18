@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-10-11 - Bugfix: Do not show the nonsensical role warning for roles which inherit the module view capability from the authenticated user role, resolves #29
+
 ### v4.5-r5
 
 * 2026-06-23 - Bugfix: Avoid a dml_missing_record_exception when editing or evaluating activities on the front page, where the course has no course category, resolves #28
