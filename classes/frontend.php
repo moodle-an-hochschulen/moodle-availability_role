@@ -44,6 +44,8 @@ class frontend extends \core_availability\frontend {
      * @return array
      */
     protected function get_javascript_init_params($course, ?\cm_info $cm = null, ?\section_info $section = null) {
+        global $CFG;
+
         // Init the JS array to be returned.
         $jsarray = [];
 
@@ -106,43 +108,49 @@ class frontend extends \core_availability\frontend {
             // If the module has no view capability, we skip the nonsensical restriction.
             $modviewcap = 'mod/' . $modname . ':view';
             if (get_capability_info($modviewcap) !== null) {
-                // A role restriction is nonsensical when the role can never view this activity type.
+                // A role restriction is nonsensical when a user who holds the role can never view this activity type.
                 //
-                // Strategy:
-                // 1. Check the 'user' archetype (= authenticated user, the implicit base for every
-                // logged-in course member). If it has CAP_ALLOW for the view capability, then all
-                // standard enrolled-user roles inherit that access by default – unless explicitly
-                // overridden at course/category level.
-                // 2. Layer explicit role_capabilities overrides (CAP_ALLOW / CAP_PROHIBIT) from the
-                // context chain on top to catch local permission changes.
-                // 3. Custom roles (no archetype) are not backed by the authenticated-user default,
-                // so they are nonsensical unless they carry an explicit CAP_ALLOW.
+                // Moodle resolves a user's permission for a capability from all of the user's roles together:
+                // A CAP_PROHIBIT in any role wins, otherwise a CAP_ALLOW in any role is enough. Every logged-in user
+                // holds the authenticated user role (defaultuserroleid) in addition to the restricted role, so the
+                // restricted role does not need to carry the view capability itself as long as the authenticated user
+                // role does. This is the case for most resources (page, label, url, ...) whose view capability is only
+                // defined for the 'user' archetype. Standard roles and custom roles are treated alike here, which avoids
+                // false warnings for roles which simply inherit the capability.
+                //
+                // The guest role and the not-logged-in role are the exception: The guest account and not-logged-in
+                // visitors do not hold the authenticated user role, so for these two roles only the role itself counts.
+                //
+                // role_context_capabilities() resolves a role's own permission along the context chain of the course
+                // (overrides included), with a CAP_PROHIBIT on any level winning.
 
-                // Step 1: Get the default capabilities for the 'user' archetype and check
-                // if it has CAP_ALLOW for the module view capability.
-                $authuserdefaults = get_default_capabilities('user');
-                $authuserhasview = isset($authuserdefaults[$modviewcap]) && $authuserdefaults[$modviewcap] == CAP_ALLOW;
+                // Resolve the permission of the authenticated user role in the course context.
+                $authuserperm = CAP_INHERIT;
+                if (!empty($CFG->defaultuserroleid)) {
+                    $authusercaps = role_context_capabilities($CFG->defaultuserroleid, $coursecontext, $modviewcap);
+                    $authuserperm = $authusercaps[$modviewcap] ?? CAP_INHERIT;
+                }
 
-                // Step 2: Get explicit CAP_ALLOW / CAP_PROHIBIT for the view capability in the course context
-                // and cache them in arrays of roleid => capvalue.
-                [$explicitallowed, $explicitprohibited] = get_roles_with_cap_in_context($coursecontext, $modviewcap);
+                // Get the guest role id to be able to recognize the guest role in the loop.
+                $guestroleid = get_guest_role()->id;
 
-                // Step 3: Loop through the roles and mark them as nonsensical if they have no access to the activity.
+                // Loop through the roles and mark them as nonsensical if users with the role cannot view the activity.
                 foreach ($jsarray as $role) {
-                    if (isset($explicitprohibited[$role->id])) {
-                        // Explicit CAP_PROHIBIT somewhere in the context chain → no access.
+                    $rolecaps = role_context_capabilities($role->id, $coursecontext, $modviewcap);
+                    $roleperm = $rolecaps[$modviewcap] ?? CAP_INHERIT;
+
+                    // Guests and not-logged-in users do not hold the authenticated user role.
+                    $isspecialrole = ($role->id == $guestroleid || $role->id == $CFG->notloggedinroleid);
+                    $baseperm = $isspecialrole ? CAP_INHERIT : $authuserperm;
+
+                    if ($roleperm == CAP_PROHIBIT || $baseperm == CAP_PROHIBIT) {
+                        // Explicit CAP_PROHIBIT somewhere in the context chain → no access at all.
                         $role->nonsensical = true;
-                    } else if (isset($explicitallowed[$role->id])) {
-                        // Explicit CAP_ALLOW override → access guaranteed.
-                        $role->nonsensical = false;
-                    } else if ($authuserhasview && !empty($role->archetype)) {
-                        // Authenticated users have the capability by default and this is a named
-                        // archetype role → inherits that default access → not nonsensical.
+                    } else if ($roleperm == CAP_ALLOW || $baseperm == CAP_ALLOW) {
+                        // Either the role itself or the authenticated user role grants the capability → access.
                         $role->nonsensical = false;
                     } else {
-                        // Custom role (no archetype) without an explicit CAP_ALLOW, or a named
-                        // archetype role where the authenticated user base does not have the
-                        // capability → nonsensical.
+                        // Neither the role nor the authenticated user role grants the capability → no access.
                         $role->nonsensical = true;
                     }
                 }
