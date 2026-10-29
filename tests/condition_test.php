@@ -446,4 +446,20 @@ final class condition_test extends \advanced_testcase {
         $this->assertEquals(123, $saved->id);
         $this->assertEquals('role', $saved->type);
     }
+
+    /**
+     * Tests that a saved condition can be reconstructed from its own save() output without losing data.
+     *
+     * @covers \availability_role\condition::__construct()
+     * @covers \availability_role\condition::save()
+     */
+    public function test_save_roundtrip(): void {
+        foreach ([123, 0] as $roleid) {
+            $structure = (object)['type' => 'role', 'id' => $roleid, 'typeid' => condition::ROLETYPE_COURSECAT];
+            $cond = new condition($structure);
+            $saved = $cond->save();
+            $this->assertEquals($structure, $saved);
+            $this->assertEquals($structure, (new condition($saved))->save());
+        }
+    }
 }

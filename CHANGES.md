@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-10-29 - Cleanup: Remove the unreachable 'same as activity' branch from the condition's save() method which produced a structure that the constructor could not read back.
+
 ### v5.2-r2
 
 * 2026-10-11 - Bugfix: Do not show the nonsensical role warning for roles which inherit the module view capability from the authenticated user role, resolves #29
