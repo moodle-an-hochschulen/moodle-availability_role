@@ -366,12 +366,10 @@ final class condition_test extends \advanced_testcase {
     }
 
     /**
-     * Tests that a not-logged-in user
-        // matches the not-logged-in role condition.
+     * Tests that a not-logged-in user matches the not-logged-in role condition.
      *
      * @covers \availability_role\condition::is_available()
-     * @covers \availability_role\c
-        // ondition::get_description()
+     * @covers \availability_role\condition::get_description()
      */
     public function test_is_available_notloggedin_role(): void {
         global $CFG, $DB;
