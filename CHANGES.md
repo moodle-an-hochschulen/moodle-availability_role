@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-10-29 - Cleanup: Remove the unreachable 'same as activity' branch from the condition's save() method which produced a structure that the constructor could not read back.
+
 ### v5.3-r1
 
 * 2026-10-05 - Prepare compatibility for Moodle 5.3.
