@@ -77,14 +77,7 @@ class condition extends \core_availability\condition {
      * @return object|\stdClass $result
      */
     public function save() {
-        $result = (object)['type' => 'role'];
-        if ($this->roleid) {
-            $result->id = $this->roleid;
-            $result->typeid = $this->typeid;
-        } else {
-            $result->activity = true;
-        }
-        return $result;
+        return (object)['type' => 'role', 'id' => $this->roleid, 'typeid' => $this->typeid];
     }
 
     /**
@@ -101,7 +94,7 @@ class condition extends \core_availability\condition {
     public function update_after_restore($restoreid, $courseid, \base_logger $logger, $name) {
         global $DB;
         if (!$this->roleid) {
-            // If using 'same as activity' option, no need to change it.
+            // Without a role id, there is nothing to remap.
             return false;
         }
         $rec = \restore_dbops::get_backup_ids_record($restoreid, 'role', $this->roleid);
