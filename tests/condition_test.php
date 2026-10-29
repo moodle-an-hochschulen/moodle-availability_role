@@ -94,6 +94,59 @@ final class condition_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that a switched course role is only honoured for the current user.
+     *
+     * @covers \availability_role\condition::is_available()
+     */
+    public function test_is_available_switched_role(): void {
+        global $CFG, $DB;
+        $this->resetAfterTest();
+        $CFG->enableavailability = true;
+
+        // Create a course, two teachers and a student.
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+        $teacher = $generator->create_user();
+        $otherteacher = $generator->create_user();
+        $student = $generator->create_user();
+
+        // Get the student and editingteacher roles.
+        $studentrole = $DB->get_record('role', ['shortname' => 'student'], '*', MUST_EXIST);
+        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher'], '*', MUST_EXIST);
+
+        // Enrol all users in the course.
+        $generator->enrol_user($teacher->id, $course->id, $teacherrole->id);
+        $generator->enrol_user($otherteacher->id, $course->id, $teacherrole->id);
+        $generator->enrol_user($student->id, $course->id, $studentrole->id);
+
+        // Log in as the teacher and switch the teacher's role to student in the course.
+        $this->setUser($teacher);
+        $coursecontext = \context_course::instance($course->id);
+        role_switch($studentrole->id, $coursecontext);
+
+        // Create the condition infos.
+        $teacherinfo = new \core_availability\mock_info($course, $teacher->id);
+        $otherteacherinfo = new \core_availability\mock_info($course, $otherteacher->id);
+        $studentinfo = new \core_availability\mock_info($course, $student->id);
+
+        // Create conditions for the student role and the editingteacher role.
+        $studentstructure = (object)['type' => 'role', 'id' => (int) $studentrole->id, 'typeid' => condition::ROLETYPE_COURSE];
+        $studentcond = new condition($studentstructure);
+        $teacherstructure = (object)['type' => 'role', 'id' => (int) $teacherrole->id, 'typeid' => condition::ROLETYPE_COURSE];
+        $teachercond = new condition($teacherstructure);
+
+        // For the current user, only the switched role should be considered.
+        $this->assertTrue($studentcond->is_available(false, $teacherinfo, true, $teacher->id));
+        $this->assertFalse($teachercond->is_available(false, $teacherinfo, true, $teacher->id));
+
+        // For other users, their real roles should be considered and not the current user's switched role.
+        $this->assertFalse($studentcond->is_available(false, $otherteacherinfo, true, $otherteacher->id));
+        $this->assertTrue($teachercond->is_available(false, $otherteacherinfo, true, $otherteacher->id));
+        $this->assertTrue($studentcond->is_available(false, $studentinfo, true, $student->id));
+        $this->assertFalse($teachercond->is_available(false, $studentinfo, true, $student->id));
+    }
+
+    /**
      * Tests the condition with a course category role (ROLETYPE_COURSECAT).
      *
      * @covers \availability_role\condition::is_available()
