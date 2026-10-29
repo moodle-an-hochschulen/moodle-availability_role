@@ -171,7 +171,9 @@ class condition extends \core_availability\condition {
             default:
                 $context = \context_course::instance($info->get_course()->id);
                 // Is the user's course role switched?
-                if (!empty($USER->access['rsw'][$context->path])) {
+                // Switched roles are stored in the session of the current user only, so they must only be honoured
+                // if the availability is evaluated for the current user and not for any other user.
+                if ($userid == $USER->id && !empty($USER->access['rsw'][$context->path])) {
                     // Check only switched role.
                     if ($USER->access['rsw'][$context->path] == $this->roleid) {
                         $allow = true;
