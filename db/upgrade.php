@@ -28,7 +28,7 @@
  * @return bool result
  */
 function xmldb_availability_role_upgrade($oldversion) {
-    if ($oldversion < 2024100704) {
+    if ($oldversion < 2024100705) {
         // Rename the config setting 'setting_supportedroles' to 'courseroles' to align with the
         // naming of the other role list settings ('coursecatroles', 'globalroles').
         $oldvalue = get_config('availability_role', 'setting_supportedroles');
@@ -51,7 +51,7 @@ function xmldb_availability_role_upgrade($oldversion) {
             unset_config('setting_supportnotloggedinrole', 'availability_role');
         }
 
-        upgrade_plugin_savepoint(true, 2024100704, 'availability', 'role');
+        upgrade_plugin_savepoint(true, 2024100705, 'availability', 'role');
     }
 
     return true;
