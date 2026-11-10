@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v4.5-r7
 
 * 2026-11-08 - Bugfix: Align the version number of the upgrade step which renames the plugin's settings with the version number of the commit which introduced it.
 * 2026-10-29 - Bugfix: Only honour a switched course role if the availability is evaluated for the current user and not for any other user.
