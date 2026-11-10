@@ -4,7 +4,7 @@ moodle-availability_role
 Changes
 -------
 
-### Unreleased
+### v5.2-r3
 
 * 2026-10-29 - Bugfix: Only honour a switched course role if the availability is evaluated for the current user and not for any other user.
 * 2026-10-29 - Cleanup: Remove the unreachable 'same as activity' branch from the condition's save() method which produced a structure that the constructor could not read back.
