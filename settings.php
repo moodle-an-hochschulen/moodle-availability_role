@@ -98,7 +98,8 @@ if ($ADMIN->fulltree) {
     // Setting for not-logged-in role.
     $name = 'availability_role/supportnotloggedinrole';
     $title = get_string('setting_supportnotloggedinrole', 'availability_role', null, true);
-    $description = get_string('setting_supportnotloggedinrole_desc', 'availability_role', null, true);
+    $description = get_string('setting_supportnotloggedinrole_desc', 'availability_role', null, true) . '<br />' .
+            get_string('setting_supportnotloggedinrole_note', 'availability_role', null, true);
     $setting = new admin_setting_configcheckbox($name, $title, $description, 0);
     $settings->add($setting);
 }
