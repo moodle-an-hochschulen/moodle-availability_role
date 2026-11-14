@@ -58,6 +58,8 @@ With these settings, you can limit the roles that can be used in the condition. 
 
 If activated, the availability of activities can be restricted to or forbidden for users that are viewing a course as guest as well as for users that are not logged in.
 
+Please note: A condition on the not-logged-in role does not only apply to users who are not logged in at all, but also to users who are logged in with the site guest account (for example by using the "Access as a guest" button on the login page). This differs from Moodle core, where the site guest account only holds the guest role, but it is intended: A user who is not logged in at all cannot enter a course, but is either sent to the login page or is logged in as guest automatically. Without this behaviour, a condition on the not-logged-in role would only have an effect on the site home.
+
 
 Capabilities
 ------------

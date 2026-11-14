@@ -181,6 +181,10 @@ class condition extends \core_availability\condition {
         // These checks are skipped as soon as the access is already granted.
 
         // Is the user not logged in?
+        // Unlike in Moodle core, the site guest account is intentionally treated as not logged in here as well.
+        // A user who is not logged in at all cannot enter a course, but is either sent to the login page or is
+        // logged in as guest automatically, so a condition on the not-logged-in role would never match
+        // within a course otherwise.
         if (!$allow && $CFG->notloggedinroleid == $this->roleid) {
             if (empty($userid) || isguestuser($userid)) {
                 $allow = true;

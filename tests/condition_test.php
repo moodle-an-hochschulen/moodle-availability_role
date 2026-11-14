@@ -410,6 +410,44 @@ final class condition_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that the site guest account matches the not-logged-in role condition as well as the guest role condition.
+     *
+     * @covers \availability_role\condition::is_available()
+     */
+    public function test_is_available_notloggedin_role_guest_account(): void {
+        global $CFG;
+        $this->resetAfterTest();
+        $CFG->enableavailability = true;
+
+        // Create a course.
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+
+        // Use a dedicated not-logged-in role, as the not-logged-in role and the guest role are the same role by default.
+        $visitorroleid = $generator->create_role(['shortname' => 'visitor', 'archetype' => 'guest']);
+        $CFG->notloggedinroleid = $visitorroleid;
+        $guestrole = get_guest_role();
+        $this->assertNotEquals($guestrole->id, $visitorroleid);
+
+        // Create the info objects for the not-logged-in user and the site guest account.
+        $guestaccount = guest_user();
+        $notloggedininfo = new \core_availability\mock_info($course, 0);
+        $guestaccountinfo = new \core_availability\mock_info($course, $guestaccount->id);
+
+        // The condition for the not-logged-in role should be available for the not-logged-in user (userid=0)
+        // and, intentionally, for the site guest account as well.
+        $structure = (object)['type' => 'role', 'id' => (int) $visitorroleid, 'typeid' => condition::ROLETYPE_COURSE];
+        $cond = new condition($structure);
+        $this->assertTrue($cond->is_available(false, $notloggedininfo, true, 0));
+        $this->assertTrue($cond->is_available(false, $guestaccountinfo, true, $guestaccount->id));
+
+        // The condition for the guest role should be available for the site guest account, too.
+        $structure = (object)['type' => 'role', 'id' => (int) $guestrole->id, 'typeid' => condition::ROLETYPE_COURSE];
+        $cond = new condition($structure);
+        $this->assertTrue($cond->is_available(false, $guestaccountinfo, true, $guestaccount->id));
+    }
+
+    /**
      * Tests that negating the condition ($not=true) inverts the availability result.
      *
      * @covers \availability_role\condition::is_available()
