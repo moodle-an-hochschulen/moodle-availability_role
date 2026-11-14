@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-11-14 - Improvement: Reduce the database queries when evaluating the condition by caching the current user's role assignments per request and by only running the guest checks if they can affect the result.
+
 ### v4.5-r7
 
 * 2026-11-08 - Bugfix: Align the version number of the upgrade step which renames the plugin's settings with the version number of the commit which introduced it.
