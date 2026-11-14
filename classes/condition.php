@@ -144,12 +144,7 @@ class condition extends \core_availability\condition {
             case self::ROLETYPE_GLOBAL:
                 $context = \context_system::instance();
                 // Check all of the user's global roles.
-                foreach (get_user_roles($context, $userid) as $role) {
-                    if ($role->roleid == $this->roleid) {
-                        $allow = true;
-                        break;
-                    }
-                }
+                $allow = $this->user_has_role($context, $userid);
                 break;
             case self::ROLETYPE_COURSECAT:
                 // The site course (front page) is not located in any course category and has category == 0.
@@ -159,12 +154,7 @@ class condition extends \core_availability\condition {
                 if (!empty($info->get_course()->category)) {
                     $context = \context_coursecat::instance($info->get_course()->category);
                     // Check all of the user's course category roles.
-                    foreach (get_user_roles($context, $userid) as $role) {
-                        if ($role->roleid == $this->roleid) {
-                            $allow = true;
-                            break;
-                        }
-                    }
+                    $allow = $this->user_has_role($context, $userid);
                 }
                 break;
             case self::ROLETYPE_COURSE:
@@ -181,30 +171,28 @@ class condition extends \core_availability\condition {
                     // Or is the user currently having his own role(s)?
                 } else {
                     // Check all of the user's course roles.
-                    foreach (get_user_roles($context, $userid) as $role) {
-                        if ($role->roleid == $this->roleid) {
-                            $allow = true;
-                            break;
-                        }
-                    }
+                    $allow = $this->user_has_role($context, $userid);
                 }
                 break;
         }
 
         // As get_user_roles only returns roles for enrolled users, we have to check whether a user
         // is viewing the course as guest or is not logged in separately.
+        // These checks are skipped as soon as the access is already granted.
 
         // Is the user not logged in?
-        if (empty($userid) || isguestuser($userid)) {
-            if ($CFG->notloggedinroleid == $this->roleid) {
+        if (!$allow && $CFG->notloggedinroleid == $this->roleid) {
+            if (empty($userid) || isguestuser($userid)) {
                 $allow = true;
             }
         }
 
         // Is the user viewing the course as guest?
-        $context = \context_course::instance($info->get_course()->id);
-        if (is_guest($context, $userid)) {
-            if (get_guest_role()->id == $this->roleid) {
+        // The role is compared first as this is cheap and as it spares the is_guest() check
+        // for all conditions which do not require the guest role.
+        if (!$allow && $this->get_guest_roleid() == $this->roleid) {
+            $context = \context_course::instance($info->get_course()->id);
+            if (is_guest($context, $userid)) {
                 $allow = true;
             }
         }
@@ -213,6 +201,65 @@ class condition extends \core_availability\condition {
             $allow = !$allow;
         }
         return $allow;
+    }
+
+    /**
+     * Check if the given user holds the role of this condition in the given context (or in one of its parent contexts).
+     *
+     * The role assignments are cached for the duration of the request in web requests, as many conditions
+     * are evaluated in a row there (e.g. on the course page).
+     *
+     * @param \context $context
+     * @param int      $userid
+     *
+     * @return bool
+     */
+    protected function user_has_role(\context $context, $userid): bool {
+        // There are two cases where the user's roles must not be cached:
+        // 1. On CLI: A CLI process (e.g. cron) may run for a long time and processes many tasks in a row without
+        // the request cache being purged in between. Role changes which are done by other processes in the
+        // meantime would be missed and the condition would be evaluated based on outdated role assignments.
+        // 2. Without a user ID: In this case, get_user_roles() falls back to the current user. The cache key
+        // would not be bound to a particular user then and would return the roles of the wrong user
+        // if the current user changes within the request (e.g. during login or login as).
+        $usecache = !CLI_SCRIPT && !empty($userid);
+
+        // Try to get the user's role IDs from the request cache.
+        $roleids = false;
+        if ($usecache) {
+            $cache = \core_cache\cache::make_from_params(\core_cache\store::MODE_REQUEST, 'availability_role', 'userroles');
+            $key = $userid . '_' . $context->id;
+            $roleids = $cache->get($key);
+        }
+
+        // If they are not cached (yet), get them from the database.
+        if ($roleids === false) {
+            $roleids = array_map('intval', array_column(get_user_roles($context, $userid), 'roleid'));
+            if ($usecache) {
+                $cache->set($key, $roleids);
+            }
+        }
+
+        return in_array((int)$this->roleid, $roleids, true);
+    }
+
+    /**
+     * Get the ID of the guest role.
+     *
+     * The ID is taken from the site configuration if possible, as get_guest_role() would fetch
+     * the whole role record from the database on each call.
+     *
+     * @return int The ID of the guest role or 0 if there is no guest role.
+     */
+    protected function get_guest_roleid(): int {
+        global $CFG;
+
+        if (!empty($CFG->guestroleid)) {
+            return (int)$CFG->guestroleid;
+        }
+
+        $guestrole = get_guest_role();
+        return $guestrole ? (int)$guestrole->id : 0;
     }
 
     /**
