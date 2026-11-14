@@ -4,6 +4,10 @@ moodle-availability_role
 Changes
 -------
 
+### Unreleased
+
+* 2026-11-14 - Improvement: Reduce the database queries when evaluating the condition by caching the current user's role assignments per request and by only running the guest checks if they can affect the result.
+
 ### v5.3-r2
 
 * 2026-10-29 - Bugfix: Only honour a switched course role if the availability is evaluated for the current user and not for any other user.
