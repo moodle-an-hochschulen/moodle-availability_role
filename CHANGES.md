@@ -6,6 +6,7 @@ Changes
 
 ### Unreleased
 
+* 2026-11-14 - Improvement: Document that a condition on the not-logged-in role intentionally applies to users who are logged in with the site guest account as well.
 * 2026-11-14 - Improvement: Reduce the database queries when evaluating the condition by caching the current user's role assignments per request and by only running the guest checks if they can affect the result.
 
 ### v5.2-r3

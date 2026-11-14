@@ -182,7 +182,7 @@ Feature: availability_role
     And I am on "Course 1" course homepage
     Then I should see "P1" in the "region-main" "region"
 
-  Scenario: Add role condition for the non-logged-in role to a page activity and try to view it with a logged-in student and a not-logged-in user
+  Scenario: Add role condition for the non-logged-in role to page activities on site home and in a course with guest access and try to view them with a not-logged-in user, the guest account and logged-in students
     Given the following "roles" exist:
       | name    | shortname | description | archetype |
       | Visitor | visitor   | Visitor     | guest     |
@@ -190,39 +190,61 @@ Feature: availability_role
       | config                 | value | plugin            |
       | supportnotloggedinrole | YES   | availability_role |
     And the following config values are set as admin:
-      | config                         | value |
-      | guestloginbutton               | 1     |
+      | config           | value |
+      | guestloginbutton | 1     |
+      | enablemyhome     | 1     |
+      | forcelogin       | 0     |
+    And the following "activities" exist:
+      | activity | course               | name | section |
+      | page     | Acceptance test site | P1   | 1       |
+      | page     | C1                   | P2   | 1       |
     And I log in as "admin"
     And I navigate to "Users > Permissions > User policies" in site administration
     And I set the field "Role for visitors" to "Visitor (visitor)"
     And I press "Save changes"
-    And I log out
-    And I log in as "teacher1"
     And I am on the "Course 1" "enrolment methods" page
     And I click on "Edit" "link" in the "Guest access" "table_row"
     And I set the following fields to these values:
       | Allow guest access | Yes |
     And I press "Save changes"
-    And I am on "Course 1" course homepage with editing mode on
-    And I add a page to section "1" using the activity chooser
+    And I am on the "P1" "page activity editing" page
     And I expand all fieldsets
     And I click on "Add restriction..." "button"
     And I click on "Role" "button"
     And I set the field "Role" to "Visitor"
     And I click on ".availability-item .availability-eye img" "css_element"
-    And I set the following fields to these values:
-      | Name         | P1 |
-      | Description  | x  |
-      | Page content | x  |
     And I click on "Save and return to course" "button"
+    And I am on the "P2" "page activity editing" page
+    And I expand all fieldsets
+    And I click on "Add restriction..." "button"
+    And I click on "Role" "button"
+    And I set the field "Role" to "Visitor"
+    And I click on ".availability-item .availability-eye img" "css_element"
+    And I click on "Save and return to course" "button"
+    # A user who is not logged in matches the not-logged-in role.
+    # (This can only be checked on site home as a user who is not logged in cannot enter a course).
+    When I log out
+    And I am on site homepage
+    Then I should see "P1" in the "region-main" "region"
+    # The site guest account is intentionally treated as not logged in as well and matches the not-logged-in role.
+    When I log in as "guest"
+    And I am on site homepage
+    Then I should see "P1" in the "region-main" "region"
+    And I am on "Course 1" course homepage
+    And I should see "P2" in the "region-main" "region"
+    # A logged-in and enrolled student does not match the not-logged-in role.
     When I log out
     And I log in as "student1"
-    And I am on "Course 1" course homepage
+    And I am on site homepage
     Then I should not see "P1" in the "region-main" "region"
-    When I log out
-    And I log in as "guest"
     And I am on "Course 1" course homepage
-    Then I should see "P1" in the "region-main" "region"
+    And I should not see "P2" in the "region-main" "region"
+    # student2 is not enrolled in the course and views it as a guest, but is logged in with a real account
+    # and thus does not match the not-logged-in role.
+    When I log out
+    And I log in as "student2"
+    And I am on "Course 1" course homepage
+    Then I should not see "P2" in the "region-main" "region"
 
   Scenario: Limit the roles which can be used in the condition to the teacher role
     When I log in as "admin"
