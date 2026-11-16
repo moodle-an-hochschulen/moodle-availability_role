@@ -45,4 +45,5 @@ $string['setting_supportguestrole'] = 'Guest role';
 $string['setting_supportguestrole_desc'] = 'If activated, the availability of activities can be restricted to or forbidden for users that are viewing a course as guest.';
 $string['setting_supportnotloggedinrole'] = 'Not-logged-in role';
 $string['setting_supportnotloggedinrole_desc'] = 'If activated, the availability of activities can be restricted to or forbidden for users that are not logged in.';
+$string['setting_supportnotloggedinrole_note'] = 'Please note: A restriction on the not-logged-in role does not only apply to users who are not logged in at all, but also to users who are logged in with the site guest account (for example by using the "Access as a guest" button on the login page).';
 $string['title'] = 'Role';
